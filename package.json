@@ -1,0 +1,19 @@
+{
+  "name": "nayushi",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "johnny-five": "^0.10.6",
+    "nodebots-interchange": "^1.1.6",
+    "socket.io": "^1.7.3"
+  },
+  "dependencies": {
+    "express": "^4.15.2"
+  }
+}
