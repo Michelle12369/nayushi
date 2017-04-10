@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.js"></script>
+</head>
+<body>
+	<script>
+	var socket = io.connect();
+    socket.on('connect', function() {
+        // socket.emit('room', {
+        //     room: ''
+        // });
+    });
+
+    $(document).ready(function() {
+        socket.on('medicineCircle', function(data) {
+            console.log(data.medicineCircle);
+            if (data.medicineCircle == true) {
+                $('#medicine').css('display','none');
+            }
+        });
+        socket.on('phoneCircle', function(data) {
+            console.log(data.phoneCircle);
+            if (data.phoneCircle == true) {
+                $('#phone').css('display','none');
+            }
+        });
+        // $('#v1').on('ended', function() {
+        //     socket.emit('video4End', { //send news to server
+        //         video1End: true
+        //     });
+        // });
+    });
+	</script>
+	
+    <div id="medicine">
+    	<svg>
+    		<circle fill="none" stroke="#890000" stroke-width="5" cx="80" cy="80" r="44"/>
+    	</svg>
+    </div>
+
+    <div id="phone">
+    	<svg>
+    		<circle fill="none" stroke="#890000" stroke-width="5" cx="80" cy="80" r="44"/>
+    	</svg>
+    </div>
+
+</body>
+</html>
