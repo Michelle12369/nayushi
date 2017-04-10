@@ -8,13 +8,7 @@ var server = http.createServer(function (request, response) {
     var path = url.parse(request.url).pathname;
 
     switch(path){
-        case '/':
-            response.writeHead(200, {'Content-Type': 'text/html'});
-            response.write('hello world');
-            response.end();
-            break;
-
-        case '/socket.html':
+        case '/index.html':
             fs.readFile(__dirname + path, function(error, data){
                 if (error){
                     response.writeHead(404);
@@ -27,6 +21,7 @@ var server = http.createServer(function (request, response) {
                     response.end();
                 }
             });
+            
             break;
         default:
             response.writeHead(404);
@@ -38,11 +33,30 @@ var server = http.createServer(function (request, response) {
 
 server.listen(3002);
 var listener = io.listen(server);
+var clients = [];
 listener.sockets.on('connection', function (socket) {
+    // example
+    console.log("connection "+socket.id);
+    clients.push(socket);
+   
     socket.emit('message', { //send message to client
         'message': 'Hello client, I am client.'
     }); 
     socket.on('news', function (data) { //get news from client
         console.log(data.hello);
+    });
+
+    //real code: computer3
+    
+    var com3_status=false;
+    socket.on('forCom3', function (data) { //get news from client
+        // if(data.sense==1){
+            console.log(data.sense);
+            clients[clients.length-1].emit('playVideo3',{
+                'playVideo3':1
+            })
+            // com3_status=true;
+        // }
+
     });
 });
