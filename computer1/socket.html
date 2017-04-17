@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>影片播放</title>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.js"></script>
+    <!-- <script src="client_main.js"></script> -->
+</head>
+<body id="Q1">
+	<p>哥哥弟弟影片</p>
+	<video width="320" height="240" controls>
+	  <source src="video.mp4" type="video/mp4">
+	</video>
+	<div id="date"></div>
+	<script>
+      	// var socket = io.connect();
+      	var socket = io.connect('http://127.0.0.1:3002');
+
+      	socket.on('message2', function(data){
+	      	console.log(data.message);
+	        if(data.message=="start_play"){
+	        	$("p").append("<b>Appended text</b>");
+	    	}
+      	});
+    </script>
+</body>
+</html>

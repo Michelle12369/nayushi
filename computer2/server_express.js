@@ -1,10 +1,10 @@
 // require
-var express = require('express')
-  , io = require('socket.io')
-  , http = require('http');
+var express = require('express'),
+    io = require('socket.io'),
+    http = require('http');
 
 // express define
-var app = express(); 
+var app = express();
 var router = express.Router();
 var server = http.createServer(app);
 
@@ -15,8 +15,8 @@ app.engine('html', require('ejs').renderFile);
 app.set('view engine', 'html');
 
 //routes settings
-router.get('/',function(req,res,next){
-	res.render('index');
+router.get('/', function(req, res, next) {
+    res.render('index');
 });
 
 app.use('/', router);
@@ -24,11 +24,9 @@ app.use('/', router);
 // socket
 var listener = io.listen(server);
 var clients = [];
-listener.sockets.on('connection', function (socket) {
+listener.sockets.on('connection', function(socket) {
     // example
-    console.log("connection "+socket.request.connection.remoteAddress);
-    clients.push(socket);
-   
+
     socket.emit('message', { //send message to client
         'message': 'Hello client, I am client.'
     }); 
@@ -60,6 +58,7 @@ listener.sockets.on('connection', function (socket) {
             com3_finished=true;
         }
     });
+
 });
 
 server.listen(3002);
