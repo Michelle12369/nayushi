@@ -44,6 +44,7 @@ listener.sockets.on('connection', function (socket) {
     }); 
     socket.on('news', function (data) { //get news from client
         console.log(data.hello);
+        console.log(data.distance);
     });
 
     //real code: computer3

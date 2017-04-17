@@ -16,7 +16,11 @@ app.engine('html', require('ejs').renderFile);
 app.set('view engine', 'html');
 
 //routes settings
+<<<<<<< HEAD
 router.get('/', function (req, res, next) {
+=======
+router.get('/', function(req, res, next) {
+>>>>>>> 2b2fa243c46a873190fab3957368ae8df2b8fdd8
     res.render('index');
 });
 
@@ -24,6 +28,7 @@ app.use('/', router);
 
 // socket
 var listener = io.listen(server);
+<<<<<<< HEAD
 var clientStatus = [];
 listener.sockets.on('connection', function (socket) {
     // example
@@ -34,6 +39,19 @@ listener.sockets.on('connection', function (socket) {
     //     console.log(data.hello);
     // });
     socket.on('room', function (data) {
+=======
+var clients = [];
+listener.sockets.on('connection', function(socket) {
+    // example
+
+    socket.emit('message', { //send message to client
+        'message': 'Hello client, I am client.'
+    }); 
+    socket.on('news', function (data) { //get news from client
+        console.log(data.hello);
+    });
+    socket.on('room',function(data){
+>>>>>>> 2b2fa243c46a873190fab3957368ae8df2b8fdd8
         socket.join(data.room);
         console.log(`${data.room} has joined the room`);
     })
@@ -63,12 +81,15 @@ listener.sockets.on('connection', function (socket) {
             clientStatus.push("computer1 finished");
         }
     });
+<<<<<<< HEAD
     socket.in('computer4').on('computer4Finished', function (data) {
         console.log(`com4:${data.computer4Finished}`);
         if (data.computer4Finished == true) {
             clientStatus.push("computer4 finished");
         }
     });
+=======
+>>>>>>> 2b2fa243c46a873190fab3957368ae8df2b8fdd8
 
 });
 

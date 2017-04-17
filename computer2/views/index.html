@@ -1,20 +1,24 @@
 <html>
 
 <head>
+    <meta charset="UTF-8">
+    <title>movie</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.js"></script>
 </head>
 
 <body>
-
     <script>
-        var socket = io.connect();
-        // var socket = io.connect('http://127.0.0.1:3001');
+    var socket = io.connect();
+    // var socket = io.connect('http://127.0.0.1:3001');
 
-        socket.on('connect', function () {
-            socket.emit('room',{room:'web'} );
+    socket.on('connect', function() {
+        socket.emit('room', {
+            room: 'web'
         });
+    });
 
+<<<<<<< HEAD
         $(document).ready(function () {
             socket.on('playVideo3', function (data) {
                 console.log(data.playVideo3);
@@ -26,13 +30,25 @@
                 socket.emit('computer3Finished', { //send news to server
                     computer3Finished: true
                 });
+=======
+    $(document).ready(function() {
+        socket.on('playVideo3', function(data) {
+            console.log(data.playVideo3);
+            if (data.playVideo3 == 1) {
+                $("#v1")[0].play();
+            }
+        });
+        $('#v1').on('ended', function() {
+            socket.emit('computer3_end', { //send news to server
+                computer3_end: true
+>>>>>>> 2b2fa243c46a873190fab3957368ae8df2b8fdd8
             });
         });
+    });
     </script>
-    <div id="date"></div>
+
     <video id="v1" width="320" height="240" controls="controls" src="computer3_video.mp4">
     </video>
-
 </body>
 
 </html>
