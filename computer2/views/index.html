@@ -23,8 +23,8 @@
                 }
             });
             $('#v1').on('ended', function () {
-                socket.emit('computer3_end', { //send news to server
-                    computer3_end: true
+                socket.emit('computer3Finished', { //send news to server
+                    computer3Finished: true
                 });
             });
         });
