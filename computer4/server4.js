@@ -32,7 +32,7 @@ listener.sockets.on('connection', function(socket) {
     // send message to computer4/views/index.html
     client4.on('connect', function() {
         console.log("socket4 connected");
-        socket.emit('room',{room:'computer4'} );
+        client4.emit('room',{room:'computer4'} );
     });
 
 
@@ -49,14 +49,13 @@ listener.sockets.on('connection', function(socket) {
         });
     },8000);
 
-
-    socket.on('circle4', function(data) {
-        console.log(data.video1End);
-        client1.emit('computer4Finished',{
-            'computer4Finished':true
-        });
-    });
-
+    setInterval(function(){
+        // socket.on('circle4', function(data) {
+            client4.emit('computer4Finished',{
+                'computer4Finished':true
+            });
+        // });
+    },4000);
 });
 
-server.listen(3001);
+server.listen(3004);

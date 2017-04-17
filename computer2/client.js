@@ -15,5 +15,5 @@ socket.on('message', function(data) { //get message from server
 });
 
 socket.emit('forCom3', {//send news to server
-            sense: 1
+    sense: 1
 });
