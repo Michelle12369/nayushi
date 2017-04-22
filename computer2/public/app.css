@@ -1,0 +1,94 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+
+*:focus{
+    outline: 0;
+}
+
+#graffiti {
+    background-image: url(img/wall.png);
+    opacity: 0;
+    transition: opacity .1s ease;
+}
+
+#logo {
+    position: absolute;
+    pointer-events: none
+}
+
+.choice {
+    width: 35px;
+    height: 35px;
+    border: 1px solid hsl(0,0%,90%);
+}
+
+.choice:hover, #graffiti:hover {
+    cursor: pointer;
+}
+
+#canvasChoices {
+    position: absolute;
+    text-align: center;
+    top: 5px;
+    right: 5px;
+}
+
+#canvasChoices p {
+    font-size: 20px;
+    padding: 5px;
+    margin: 0;
+}
+
+.choiceImg {
+    background: no-repeat center;
+    background-color: white;
+    background-size: 25px;
+}
+
+#undo {
+    background-image: url(img/undo.png);
+}
+
+#pencil {
+    background-image: url(img/pencil.png);
+    background-color: hsl(0,0%,75%);
+}
+
+#spray {
+    background-image: url(img/spray.png);
+}
+
+#text {
+    background-image: url(img/text.png);
+}
+
+.color.black {
+    background-color: hsl(0, 0%, 0%);
+}
+
+.color.blue {
+    background-color: hsl(236, 87%, 42%);
+}
+
+.color.green {
+    background-color: hsl(107, 45%, 40%);
+}
+
+.color.red {
+    background-color: hsl(0, 78%, 48%);
+}
+
+.color.white {
+    background-color: hsl(0, 3%, 94%);
+}
+
+#requestText {
+    font: 15px sans-serif;
+    position: absolute;
+    background-color: hsla(0,0%,0%,.15);
+    min-width: 50px;
+    padding: 5px;
+    border: 0;
+}

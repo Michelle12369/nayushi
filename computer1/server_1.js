@@ -56,7 +56,7 @@ listener.sockets.on('connection', function(socket) {
     // send message to index.html
     client1.on('connect', function() {
         console.log("socket1 connected");
-        socket.emit('room',{room:'computer1'} );
+        client1.emit('room',{room:'computer1'} );
     });
 
     socket.emit('playVideo1', { //send message to client

@@ -16,11 +16,7 @@ app.engine('html', require('ejs').renderFile);
 app.set('view engine', 'html');
 
 //routes settings
-<<<<<<< HEAD
 router.get('/', function (req, res, next) {
-=======
-router.get('/', function(req, res, next) {
->>>>>>> 2b2fa243c46a873190fab3957368ae8df2b8fdd8
     res.render('index');
 });
 
@@ -28,8 +24,9 @@ app.use('/', router);
 
 // socket
 var listener = io.listen(server);
-<<<<<<< HEAD
+
 var clientStatus = [];
+var graffitiReady=false;
 listener.sockets.on('connection', function (socket) {
     // example
     // socket.emit('message', { //send message to client
@@ -39,24 +36,11 @@ listener.sockets.on('connection', function (socket) {
     //     console.log(data.hello);
     // });
     socket.on('room', function (data) {
-=======
-var clients = [];
-listener.sockets.on('connection', function(socket) {
-    // example
-
-    socket.emit('message', { //send message to client
-        'message': 'Hello client, I am client.'
-    }); 
-    socket.on('news', function (data) { //get news from client
-        console.log(data.hello);
-    });
-    socket.on('room',function(data){
->>>>>>> 2b2fa243c46a873190fab3957368ae8df2b8fdd8
         socket.join(data.room);
         console.log(`${data.room} has joined the room`);
     })
 
-    //real code: computer3
+    //real code: get computer3 arduino
     var com3_status = false;
     socket.in("localclient").on('forCom3', function (data) {
         if (!com3_status) {
@@ -70,10 +54,10 @@ listener.sockets.on('connection', function(socket) {
 
     //check whether other computer has finished
     socket.in("web").on('computer3Finished', function (data) {
-        console.log(`com3:${data.computer3Finished}`);
         if (data.computer3Finished == true) {
             clientStatus.push("computer3 finished");
         }
+        clientStatus.forEach(client => console.log(`status:${client}`));
     });
     socket.in('computer1').on('computer1Finished', function (data) {
         console.log(`com1:${data.computer1Finished}`);
@@ -81,16 +65,24 @@ listener.sockets.on('connection', function(socket) {
             clientStatus.push("computer1 finished");
         }
     });
-<<<<<<< HEAD
     socket.in('computer4').on('computer4Finished', function (data) {
         console.log(`com4:${data.computer4Finished}`);
         if (data.computer4Finished == true) {
             clientStatus.push("computer4 finished");
         }
     });
-=======
->>>>>>> 2b2fa243c46a873190fab3957368ae8df2b8fdd8
+    setInterval(function () {
+        if (clientStatus.includes("computer3 finished")&&!graffitiReady) {//&&clientStatus.includes("computer1 finished")&&clientStatus.includes("computer4 finished")
+            startGraffiti();
+        }
+    }, 1000);
 
+    function startGraffiti(){
+        socket.in('web').emit('graffiti', {
+                'graffiti': true
+        });
+        graffitiReady=true;
+    }
 });
 
 server.listen(3002);

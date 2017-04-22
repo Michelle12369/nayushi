@@ -3,7 +3,6 @@ var socket = io.connect('http://localhost:3002');
 
 socket.on('connect', function () {
     console.log("socket connected");
-
     socket.emit('room',{room:'localclient'} );
 });
 
@@ -15,6 +14,6 @@ socket.on('message', function(data) { //get message from server
     console.log(data.message);
 });
 
-socket.emit('forCom3', { //send news to server
+socket.emit('forCom3', {//send news to server
     sense: 1
 });

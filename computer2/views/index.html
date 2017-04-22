@@ -3,22 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <title>movie</title>
+    <link rel="stylesheet" href="app.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.js"></script>
 </head>
 
 <body>
     <script>
-    var socket = io.connect();
-    // var socket = io.connect('http://127.0.0.1:3001');
+        var socket = io.connect();
+        // var socket = io.connect('http://127.0.0.1:3001');
 
-    socket.on('connect', function() {
-        socket.emit('room', {
-            room: 'web'
+        socket.on('connect', function () {
+            socket.emit('room', {
+                room: 'web'
+            });
         });
-    });
 
-<<<<<<< HEAD
+
         $(document).ready(function () {
             socket.on('playVideo3', function (data) {
                 console.log(data.playVideo3);
@@ -27,28 +28,46 @@
                 }
             });
             $('#v1').on('ended', function () {
-                socket.emit('computer3Finished', { //send news to server
+                socket.emit('computer3Finished', {
                     computer3Finished: true
                 });
-=======
-    $(document).ready(function() {
-        socket.on('playVideo3', function(data) {
-            console.log(data.playVideo3);
-            if (data.playVideo3 == 1) {
-                $("#v1")[0].play();
-            }
-        });
-        $('#v1').on('ended', function() {
-            socket.emit('computer3_end', { //send news to server
-                computer3_end: true
->>>>>>> 2b2fa243c46a873190fab3957368ae8df2b8fdd8
             });
+            socket.on('graffiti', function (data) {
+                console.log(data.graffiti);
+                if (data.graffiti == true) {
+                    $("#v1").remove();
+                    $("#container").append(
+                        `
+                     <div id="canvasChoices">
+                        <div>
+                        <div id="undo" class="choice choiceImg"></div>
+                        <div id="pencil" class="choice choiceImg"></div>
+                        <div id="spray" class="choice choiceImg"></div>
+                        <div id="text" class="choice choiceImg"></div>
+                        <div class="choice color black" data-color="black"></div>
+                        <div class="choice color blue" data-color="blue"></div>
+                        <div class="choice color green" data-color="green"></div>
+                        <div class="choice color red" data-color="red"></div>
+                        <div class="choice color white" data-color="white"></div>
+                        <div id="clear"  class="choice choiceImg">clear</div>
+                        </div>
+                    </div>
+                    <canvas id="graffiti"></canvas>
+                    `
+                    );
+                    $(document.body).append('<script src="firebase.js"><'+'/script><script src="Graffiti.js"><'+'/script><script src="app.js"><'+'/script>');
+                }
+            });
+
         });
-    });
     </script>
 
-    <video id="v1" width="320" height="240" controls="controls" src="computer3_video.mp4">
+    <video id="v1" controls="controls" src="computer3_video.mp4">
     </video>
+    <div id="container">
+    </div>
+    
+                    
 </body>
 
 </html>
