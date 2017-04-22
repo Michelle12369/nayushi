@@ -7,7 +7,11 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.js"></script>
 </head>
-
+<style>
+    body{
+        background: black;
+    }
+</style>
 <body>
     <script>
         var socket = io.connect();
@@ -24,19 +28,23 @@
             socket.on('playVideo3', function (data) {
                 console.log(data.playVideo3);
                 if (data.playVideo3 == 1) {
+                    $("#container").html(
+                        `<video id="v1" controls="controls" src="computer3_video.mp4"></video>`
+                    );
                     $("#v1")[0].play();
+                    $("#v1").on('ended', function () {
+                        console.log('finished');
+                        socket.emit('computer3Finished', {
+                            computer3Finished: true
+                        });
+                    });
                 }
             });
-            $('#v1').on('ended', function () {
-                socket.emit('computer3Finished', {
-                    computer3Finished: true
-                });
-            });
+
             socket.on('graffiti', function (data) {
                 console.log(data.graffiti);
                 if (data.graffiti == true) {
-                    $("#v1").remove();
-                    $("#container").append(
+                    $("#container").html(
                         `
                      <div id="canvasChoices">
                         <div>
@@ -55,19 +63,19 @@
                     <canvas id="graffiti"></canvas>
                     `
                     );
-                    $(document.body).append('<script src="firebase.js"><'+'/script><script src="Graffiti.js"><'+'/script><script src="app.js"><'+'/script>');
+                    $(document.body).append('<script src="firebase.js"><' +
+                        '/script><script src="Graffiti.js"><' + '/script><script src="app.js"><' +
+                        '/script>');
                 }
             });
 
         });
     </script>
-
-    <video id="v1" controls="controls" src="computer3_video.mp4">
-    </video>
     <div id="container">
+    	<svg>
+    		<circle fill="none" stroke="white" stroke-width="5" cx="80" cy="80" r="44"/>
+    	</svg>
     </div>
-    
-                    
 </body>
 
 </html>

@@ -78,6 +78,7 @@ listener.sockets.on('connection', function (socket) {
     }, 1000);
 
     function startGraffiti(){
+        console.log(graffitiReady);
         socket.in('web').emit('graffiti', {
                 'graffiti': true
         });
