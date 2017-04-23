@@ -3,7 +3,7 @@ var five = require("johnny-five");
 var setClient1 = require('socket.io-client');
 
 // 記得要改ip位址
-var client1 = setClient1.connect('http://192.168.1.185:3002');
+var client1 = setClient1.connect('http://192.168.1.87:3002');
 var express = require('express'),
     io = require('socket.io'),
     http = require('http');
@@ -42,6 +42,10 @@ var listener = io.listen(server);
 /*********************************************************/
 /*********************************************************/
 
+client1.on('connect', function() {
+    console.log("socket1 connected");
+    client1.emit('room',{room:'computer1'} );
+});
 
 listener.sockets.on('connection', function(socket) {
 
@@ -59,32 +63,18 @@ listener.sockets.on('connection', function(socket) {
             // console.log("  cm  : ", this.cm);
             // console.log("  in  : ", this.in);
             distance = this.cm;
-
-        });
-        setInterval(function() {
-            console.log(distance)
+            console.log(distance);
             if(distance > 0 && distance <15){
                 socket.emit('playVideo1', { //send message to client
                     'playVideo1': true
                 });
             }
-        }, 1000);
+        });
 
         proximity.on("change", function() {
             // console.log("The obstruction has moved.");
         });
     });
-
-    // send message to index.html
-    client1.on('connect', function() {
-        console.log("socket1 connected");
-        client1.emit('room',{room:'computer1'} );
-    });
-    if(distance > 0 && distance <15){
-        socket.emit('playVideo1', { //send message to client
-            'playVideo1': true
-        });
-    }
 
     socket.on('video1End', function(data) {
         console.log(data.video1End);
