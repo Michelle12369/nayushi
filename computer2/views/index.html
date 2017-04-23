@@ -3,38 +3,79 @@
 <head>
     <meta charset="UTF-8">
     <title>movie</title>
+    <link rel="stylesheet" href="app.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.js"></script>
 </head>
-
+<style>
+    body{
+        background: black;
+    }
+</style>
 <body>
     <script>
-    var socket = io.connect();
-    // var socket = io.connect('http://127.0.0.1:3001');
+        var socket = io.connect();
+        // var socket = io.connect('http://127.0.0.1:3001');
 
-    socket.on('connect', function() {
-        socket.emit('room', {
-            room: 'web'
-        });
-    });
-
-    $(document).ready(function() {
-        socket.on('playVideo3', function(data) {
-            console.log(data.playVideo3);
-            if (data.playVideo3 == 1) {
-                $("#v1")[0].play();
-            }
-        });
-        $('#v1').on('ended', function() {
-            socket.emit('computer3_end', { //send news to server
-                computer3_end: true
+        socket.on('connect', function () {
+            socket.emit('room', {
+                room: 'web'
             });
         });
-    });
-    </script>
 
-    <video id="v1" width="320" height="240" controls="controls" src="computer3_video.mp4">
-    </video>
+
+        $(document).ready(function () {
+            socket.on('playVideo3', function (data) {
+                console.log(data.playVideo3);
+                if (data.playVideo3 == 1) {
+                    $("#container").html(
+                        `<video id="v1" controls="controls" src="computer3_video.mp4"></video>`
+                    );
+                    $("#v1")[0].play();
+                    $("#v1").on('ended', function () {
+                        console.log('finished');
+                        socket.emit('computer3Finished', {
+                            computer3Finished: true
+                        });
+                    });
+                }
+            });
+
+            socket.on('graffiti', function (data) {
+                console.log(data.graffiti);
+                if (data.graffiti == true) {
+                    $("#container").html(
+                        `
+                     <div id="canvasChoices">
+                        <div>
+                        <div id="undo" class="choice choiceImg"></div>
+                        <div id="pencil" class="choice choiceImg"></div>
+                        <div id="spray" class="choice choiceImg"></div>
+                        <div id="text" class="choice choiceImg"></div>
+                        <div class="choice color black" data-color="black"></div>
+                        <div class="choice color blue" data-color="blue"></div>
+                        <div class="choice color green" data-color="green"></div>
+                        <div class="choice color red" data-color="red"></div>
+                        <div class="choice color white" data-color="white"></div>
+                        <div id="clear"  class="choice choiceImg">clear</div>
+                        </div>
+                    </div>
+                    <canvas id="graffiti"></canvas>
+                    `
+                    );
+                    $(document.body).append('<script src="firebase.js"><' +
+                        '/script><script src="Graffiti.js"><' + '/script><script src="app.js"><' +
+                        '/script>');
+                }
+            });
+
+        });
+    </script>
+    <div id="container">
+    	<svg>
+    		<circle fill="none" stroke="white" stroke-width="5" cx="80" cy="80" r="44"/>
+    	</svg>
+    </div>
 </body>
 
 </html>
