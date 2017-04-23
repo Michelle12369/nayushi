@@ -25,6 +25,7 @@ app.use('/', router);
 // socket
 var listener = io.listen(server);
 
+
 var clientStatus = [];
 var graffitiReady=false;
 listener.sockets.on('connection', function (socket) {
