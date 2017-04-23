@@ -43,7 +43,7 @@ listener.sockets.on('connection', function (socket) {
 
     //real code: get computer3 arduino
     var com3_status = false;
-    socket.in("localclient").on('forCom3', function (data) {
+    socket.in("computer3").on('forCom3', function (data) {
         if (!com3_status) {
             // console.log(data.sense);
             socket.in("web").emit('playVideo3', {
@@ -73,7 +73,7 @@ listener.sockets.on('connection', function (socket) {
         }
     });
     setInterval(function () {
-        if (clientStatus.includes("computer3 finished")&&!graffitiReady) {//&&clientStatus.includes("computer1 finished")&&clientStatus.includes("computer4 finished")
+        if (clientStatus.includes("computer3 finished")&&!graffitiReady&&clientStatus.includes("computer1 finished")&&clientStatus.includes("computer4 finished")){//&&clientStatus.includes("computer1 finished")&&clientStatus.includes("computer4 finished")
             startGraffiti();
         }
     }, 1000);

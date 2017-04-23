@@ -2,10 +2,12 @@ var io = require('socket.io-client');
 var five = require("johnny-five"),
   fsr;
 
-var socket = io.connect('http://localhost:3002');
+var socket = io.connect('http://192.168.1.87:3002');
 socket.on('connect', function () {
-    console.log("socket connected");
-    socket.emit('room',{room:'computer3'} );
+  console.log("socket connected");
+  socket.emit('room', {
+    room: 'computer3'
+  });
 });
 
 (new five.Board()).on("ready", function () {
@@ -18,11 +20,15 @@ socket.on('connect', function () {
 
   // Scale the sensor's value to the LED's brightness range
   fsr.scale([0, 255]).on("data", function () {
-    console.log(this.scaled);
-    if (this.scaled <= 200) {
-      socket.emit('forCom3', { //send news to server
-        sense: 1
-      });
-    }
+    setTimeout(senddata, 3000, this);
   });
 });
+
+function senddata(data) {
+  console.log(data.scaled);
+  if (data.scaled <= 200) {
+    socket.emit('forCom3', { 
+      sense: 1
+    });
+  }
+}
