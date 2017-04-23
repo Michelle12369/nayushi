@@ -26,7 +26,7 @@ socket.on('connect', function () {
 
 function senddata(data) {
   console.log(data.scaled);
-  if (data.scaled <= 200) {
+  if (data.scaled <= 150) {
     socket.emit('forCom3', { 
       sense: 1
     });
