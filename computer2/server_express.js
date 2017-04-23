@@ -29,7 +29,7 @@ listener.sockets.on('connection', function(socket) {
 
     socket.emit('message', { //send message to client
         'message': 'Hello client, I am client.'
-    }); 
+    });
     socket.on('news', function (data) { //get news from client
         console.log(data.hello);
     });
