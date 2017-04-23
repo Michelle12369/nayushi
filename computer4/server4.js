@@ -1,7 +1,7 @@
 // require
 var five = require("johnny-five");
 var setClient4 = require('socket.io-client');
-var client4 = setClient4.connect('http://192.168.1.171:3002');
+var client4 = setClient4.connect('http://192.168.1.87:3002');
 var express = require('express'),
     io = require('socket.io'),
     http = require('http');
@@ -95,9 +95,9 @@ listener.sockets.on('connection', function(socket) {
             board: telephone
         });
         var phone_sensor = new five.Sensor({ pin: "A0", board: telephone });
-        phone_sensor.on("change", function(value) {
-            // console.log("phone_sensor:"+value);
-            phone = value;
+        phone_sensor.scale([0,255]).on("data", function() {
+            console.log("phone_sensor:"+this.scaled);
+            phone = this.scaled;
 
         });
         proximity.on("data", function() {
