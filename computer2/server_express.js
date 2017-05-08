@@ -19,6 +19,12 @@ app.set('view engine', 'html');
 router.get('/', function (req, res, next) {
     res.render('index');
 });
+router.get('/test.html', function (req, res, next) {
+    res.render('test');
+});
+router.get('/gra.html', function (req, res, next) {
+    res.render('gra');
+});
 
 app.use('/', router);
 
