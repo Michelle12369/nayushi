@@ -60,15 +60,21 @@
                         <div id="clear"  class="choice choiceImg">clear</div>
                         </div>
                     </div>
-                    <canvas id="graffiti"></canvas>
+                    <canvas id="graffiti" width="100%"></canvas>
+                    <button id="clickme">Click me</button>
                     `
                     );
                     $(document.body).append('<script src="firebase.js"><' +
                         '/script><script src="Graffiti.js"><' + '/script><script src="app.js"><' +
                         '/script>');
+                    $('#clickme').addEventListener('click',myfunction);
                 }
             });
-
+            function myfunction(){
+                var canvas=document.querySelector('canvas');
+                var myImage = canvas.toDataURL("image/png");
+                window.open(myImage);
+            }
         });
     </script>
     <div id="container">
