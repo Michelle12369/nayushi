@@ -17,3 +17,7 @@ socket.on('message', function(data) { //get message from server
 socket.emit('forCom3', {//send news to server
     sense: 1
 });
+
+socket.emit('startpen', {//send news to server
+    startpen:true
+});
