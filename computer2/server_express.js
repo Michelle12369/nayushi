@@ -57,38 +57,42 @@ listener.sockets.on('connection', function (socket) {
     });
 
     setInterval(function () {
-        if (penIsTook && (!graffitiPen)) { //&&clientStatus.includes("computer1 finished")&&clientStatus.includes("computer4 finished")
-            startPen();
-            graffitiPen = true;
-        }
+        // if (penIsTook && (!graffitiPen)) { //&&clientStatus.includes("computer1 finished")&&clientStatus.includes("computer4 finished")
+        //     socket.in("web").emit('pen', {
+        //         'pen': true
+        //     });
+        //     graffitiPen = true;
+        // }
     }, 1000);
 
-    function startPen() {
-        socket.in("web").emit('pen', {
-            'pen': true
-        });
-    }
     //get computer3 makey makey
-    var com3_status = false;
-    socket.in("computer3").on('forCom3', function (data) {
-        if (!com3_status) {
+    // var com3_status = false;
+    // socket.in("computer3").on('forCom3', function (data) {
+    //     if (!com3_status) {
+    //         // console.log(data.sense);
+    //         socket.in("web").emit('playVideo3', {
+    //             'playVideo3': 1
+    //         });
+    //         com3_status = true;
+    //     }
+    // });
+    socket.in("localclient").on('shortcut',function(data){
+        console.log('got it');
+        socket.in("web").emit('playVideo3', {
+            'playVideo3': 1
+        });
+    });
+
+    var graIsfinished=false;
+    socket.in("computer3").on('finishedGraffiti', function (data) {
+        if (!graIsfinished) {
             // console.log(data.sense);
-            socket.in("web").emit('playVideo3', {
-                'playVideo3': 1
-            })
-            com3_status = true;
-        }
-    });
-
-    socket.in("web").on('computer3Finished', function (data) {
-        if (data.computer3Finished == true) {
-            console.log('computer3 Finished video')
-            socket.in("web").emit('graffiti', {
-                'graffiti': true
+            socket.in("web").emit('stopGra', {
+                'stopGra': true
             });
+            graIsfinished = true;
         }
     });
-
 
 
     //check whether other computer has finished
