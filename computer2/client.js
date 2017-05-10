@@ -4,6 +4,9 @@ var socket = io.connect('http://localhost:3002');
 socket.on('connect', function () {
     console.log("socket connected");
     socket.emit('room',{room:'localclient'} );
+    socket.emit('shortcut',{
+		shortcut:true
+	});
 });
 
 socket.emit('news', { //send news to server
@@ -21,3 +24,4 @@ socket.emit('forCom3', {//send news to server
 socket.emit('startpen', {//send news to server
     startpen:true
 });
+
