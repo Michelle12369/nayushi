@@ -33,7 +33,8 @@ var listener = io.listen(server);
 
 
 var clientStatus = [];
-var graffitiReady=false;
+var graffitiReady = false;
+var graffitiPen = false;
 listener.sockets.on('connection', function (socket) {
     // example
     // socket.emit('message', { //send message to client
@@ -47,7 +48,27 @@ listener.sockets.on('connection', function (socket) {
         console.log(`${data.room} has joined the room`);
     })
 
-    //real code: get computer3 arduino
+    //test whether computer 1 and 4 are completed
+    var penIsTook = false;
+    socket.in("localclient").on('startpen', function (data) {
+        if (data.startpen == true) {
+            penIsTook = true;
+        }
+    });
+
+    setInterval(function () {
+        if (penIsTook && (!graffitiPen)) { //&&clientStatus.includes("computer1 finished")&&clientStatus.includes("computer4 finished")
+            startPen();
+            graffitiPen = true;
+        }
+    }, 1000);
+
+    function startPen() {
+        socket.in("web").emit('pen', {
+            'pen': true
+        });
+    }
+    //get computer3 makey makey
     var com3_status = false;
     socket.in("computer3").on('forCom3', function (data) {
         if (!com3_status) {
@@ -59,13 +80,19 @@ listener.sockets.on('connection', function (socket) {
         }
     });
 
-    //check whether other computer has finished
     socket.in("web").on('computer3Finished', function (data) {
         if (data.computer3Finished == true) {
-            clientStatus.push("computer3 finished");
+            console.log('computer3 Finished video')
+            socket.in("web").emit('graffiti', {
+                'graffiti': true
+            });
         }
-        clientStatus.forEach(client => console.log(`status:${client}`));
     });
+
+
+
+    //check whether other computer has finished
+
     socket.in('computer1').on('computer1Finished', function (data) {
         console.log(`com1:${data.computer1Finished}`);
         if (data.computer1Finished == true) {
@@ -78,19 +105,8 @@ listener.sockets.on('connection', function (socket) {
             clientStatus.push("computer4 finished");
         }
     });
-    setInterval(function () {
-        if (clientStatus.includes("computer3 finished")&&!graffitiReady&&clientStatus.includes("computer1 finished")&&clientStatus.includes("computer4 finished")){//&&clientStatus.includes("computer1 finished")&&clientStatus.includes("computer4 finished")
-            startGraffiti();
-        }
-    }, 1000);
 
-    function startGraffiti(){
-        console.log(graffitiReady);
-        socket.in('web').emit('graffiti', {
-                'graffiti': true
-        });
-        graffitiReady=true;
-    }
+
 });
 
 server.listen(3002);

@@ -25,14 +25,24 @@
             });
         });
 
-
+        
         $(document).ready(function () {
+            socket.on('pen',function(data){
+                console.log(data.pen);
+                console.log('請拿起桌上的筆');
+                $("#container").html(
+                    `<div id="alert" style="color:white;">請拿起左邊櫃子上的筆</div>`
+                )
+                $("#alert").fadeIn(5000);
+            });
+
             socket.on('playVideo3', function (data) {
                 console.log(data.playVideo3);
                 if (data.playVideo3 == 1) {
                     $("#container").html(
                         `<video id="v1" controls="controls" src="video.mp4"></video>`
                     );
+                    $("#v1")[0].style.width=window.innerWidth;
                     $("#v1")[0].play();
                     $("#v1").on('ended', function () {
                         console.log('finished');
@@ -62,21 +72,25 @@
                         <div id="clear"  class="choice choiceImg">clear</div>
                         </div>
                     </div>
-                    <canvas id="graffiti"></canvas>
+                    <canvas id="graffiti" width="100%"></canvas>
+                    <button id="clickme">Click me</button>
                     `
                     );
                     $(document.body).append('<script src="firebase.js"><' +
                         '/script><script src="Graffiti.js"><' + '/script><script src="app.js"><' +
                         '/script>');
+                    $('#clickme').on('click',myfunction);
                 }
             });
-
+            function myfunction(){
+                var canvas=document.querySelector('canvas');
+                var myImage = canvas.toDataURL("image/png");
+                window.open(myImage);
+            }
         });
     </script>
     <div id="container">
-    	<svg>
-    		<circle fill="none" stroke="white" stroke-width="5" cx="80" cy="80" r="44"/>
-    	</svg>
+    	
     </div>
 </body>
 
