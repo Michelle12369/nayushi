@@ -26,7 +26,7 @@ App.loadImages = function() {
     // logoImg.onload = function() {
     //     this.style.left = (window.innerWidth  - 500) / 2 + 'px';
     //     this.style.top  = (window.innerHeight) / 4 + 'px';
-    //     document.body.appendChild(this);
+    //     document.body.appendChild(this); 
     // }
 };
 
