@@ -96,7 +96,7 @@ listener.sockets.on('connection', function(socket) {
         });
         var phone_sensor = new five.Sensor({ pin: "A0", board: telephone });
         phone_sensor.scale([0,255]).on("data", function() {
-            console.log("phone_sensor:"+this.scaled);
+            // console.log("phone_sensor:"+this.scaled);
             phone = this.scaled;
 
         });
@@ -132,6 +132,8 @@ listener.sockets.on('connection', function(socket) {
                 'computer4Finished': true
             });
             ok = true;
+            // server.close();
+            process.exit(0);
         }
     }, 1000);
 });

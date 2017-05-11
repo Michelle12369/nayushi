@@ -81,6 +81,7 @@ listener.sockets.on('connection', function(socket) {
         client1.emit('computer1Finished',{
             'computer1Finished':true
         });
+        process.exit(0);
     });
 
 });
