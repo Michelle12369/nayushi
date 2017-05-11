@@ -43,7 +43,7 @@
                 $("#container").html(
                     `<div id="alert" style="color:white;">請拿起左邊櫃子上的筆</div>`
                 );
-                });
+
                 socket.on('playVideo3', function (data) {
                     console.log("playVideo:" + data.playVideo3);
                     if (data.playVideo3 == 1) {
@@ -82,7 +82,7 @@
                             $('#clickme').on('click', myfunction);
                         });
                     }
-                
+                });
             });
 
             socket.on('stopGra', function () {
