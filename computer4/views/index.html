@@ -1,67 +1,70 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-	<meta charset="UTF-8">
-	<title>Document</title>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.js"></script>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.js"></script>
 </head>
+
 <body>
-	<script>
-	var socket = io.connect();
-    socket.on('connect', function() {
-        // socket.emit('room', {
-        //     room: ''
-        // });
-    });
-    $(document).ready(function() {
-        socket.on('medicineCircle', function(data) {
-            console.log(data.medicineCircle);
-            if (data.medicineCircle == true) {
-                $('#medicine').css('display','none');
-            }
+    <script>
+        var socket = io.connect();
+        socket.on('connect', function () {
+            // socket.emit('room', {
+            //     room: ''
+            // });
         });
-        socket.on('phoneCircle', function(data) {
-            console.log(data.phoneCircle);
-            if (data.phoneCircle == true) {
-                $('#phone').css('display','none');
-            }
-        });
-        // 電話聲響
-        socket.on('playMusic', function(data) {
-            console.log(data.playMusic);
-            if (data.playMusic == true) {
-                $('#ringAudio')[0].play();
-            }
-        });
-        // 接起電話
-        socket.on('playTalk', function(data) {
-            console.log(data.playTalk);
-            if (data.playTalk == true) {
-                // var ringAudio = document.getElementById("ringAudio");
-                // ringAudio.pause();
-                $('#ringAudio')[0].pause();
-                $('#phone').remove();
-                $('#talk')[0].play();
-                // $('body').append('<audio id="talk" autoplay><source src="good.mp3" type="audio/mpeg"></audio>');
-            }
-        });
-
-        $('#talk').on("ended",function(){
-            socket.emit('talkEnd', { //send news to server
-                talkEnd: true
+        $(document).ready(function () {
+            socket.on('medicineCircle', function (data) {
+                console.log(data.medicineCircle);
+                if (data.medicineCircle == true) {
+                    $('#medicine').css('display', 'none');
+                }
             });
-        });
+            socket.on('phoneCircle', function (data) {
+                console.log(data.phoneCircle);
+                if (data.phoneCircle == true) {
+                    $('#phone').css('display', 'none');
+                }
+            });
+            // 電話聲響
+            socket.on('playMusic', function (data) {
+                console.log(data.playMusic);
+                if (data.playMusic == true) {
+                    $('#ringAudio')[0].play();
+                }
+            });
+            // 接起電話
+            socket.on('playTalk', function (data) {
+                console.log(data.playTalk);
+                if (data.playTalk == true) {
+                    // var ringAudio = document.getElementById("ringAudio");
+                    // ringAudio.pause();
+                    $('#ringAudio')[0].pause();
+                    $('#phone').remove();
+                    $('#talk')[0].play();
+                    // $('body').append('<audio id="talk" autoplay><source src="good.mp3" type="audio/mpeg"></audio>');
+                }
+            });
 
-    });
-	</script>
+            $('#talk').on("ended", function () {
+                socket.emit('talkEnd', { //send news to server
+                    talkEnd: true
+                });
+            });
+
+        });
+    </script>
     <style>
-        body{
-            margin:0;
+        body {
+            margin: 0;
             background-color: black;
         }
         /*圈住感測器位置*/
-        #medicine{
+
+        #medicine {
             /*display: inline-block;*/
             height: 70px;
             width: 70px;
@@ -72,7 +75,8 @@
             /*border-radius: 100%;*/
             z-index: -1;
         }
-        #phone{
+
+        #phone {
             /*display: inline-block;*/
             height: 70px;
             width: 70px;
@@ -80,31 +84,36 @@
             left: 600px;
             bottom: 300px;
         }
-        #v1{
+
+        #v1 {
             z-index: 10;
         }
-        #ring{
+
+        #ring {
             display: none;
         }
     </style>
     <div id="medicine">
-    	<svg>
-    		<circle fill="none" stroke="white" stroke-width="5" cx="80" cy="80" r="44"/>
-    	</svg>
+        <svg>
+            <circle fill="none" stroke="white" stroke-width="5" cx="80" cy="80" r="44" />
+        </svg>
     </div>
 
     <div id="phone">
-    	<svg>
-    		<circle fill="none" stroke="white" stroke-width="5" cx="80" cy="80" r="44"/>
-    	</svg>
+        <svg>
+            <circle fill="none" stroke="white" stroke-width="5" cx="80" cy="80" r="44" />
+        </svg>
     </div>
     <div id="ring">
-        <audio controls id="ringAudio" >
-            <source  src="ring.mp3" type="audio/mpeg">
+        <audio controls id="ringAudio">
+            <source src="ring.mp3" type="audio/mpeg">
         </audio>
     </div>
     <div style="display: none">
-        <audio id="talk" controls><source src="good.mp3" type="audio/mpeg"></audio>
+        <audio id="talk" controls>
+            <source src="good.mp3" type="audio/mpeg">
+        </audio>
     </div>
 </body>
+
 </html>

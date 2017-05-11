@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.js"></script>
+</head>
+
+<body>
+
+    <script>
+        var socket = io.connect();
+        window.addEventListener('keyup', function (e) {
+            console.log(`keyup:${e.key}`);
+            if(e.key=='ArrowDown'){
+                socket.emit('keyUp', {
+                    keyUp:'up'
+                });
+            }
+            window.addEventListener('keydown',function(e){
+                console.log(`keydown:${e.key}`);
+                if(e.key=='ArrowDown'){
+                socket.emit('keyDown', {
+                    keyDown:'down'
+                });
+            }
+            });
+        });
+        
+    </script>
+</body>
+
+</html>
