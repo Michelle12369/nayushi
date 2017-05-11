@@ -36,13 +36,7 @@ var clientStatus = [];
 var graffitiReady = false;
 var graffitiPen = false;
 listener.sockets.on('connection', function (socket) {
-    // example
-    // socket.emit('message', { //send message to client
-    //     'message': 'Hello client, I am client.'
-    // });
-    // socket.on('news', function (data) { //get news from client
-    //     console.log(data.hello);
-    // });
+
     socket.on('room', function (data) {
         socket.join(data.room);
         console.log(`${data.room} has joined the room`);
@@ -57,31 +51,31 @@ listener.sockets.on('connection', function (socket) {
     });
 
     setInterval(function () {
-        // if (penIsTook && (!graffitiPen)) { //&&clientStatus.includes("computer1 finished")&&clientStatus.includes("computer4 finished")
-        //     socket.in("web").emit('pen', {
-        //         'pen': true
-        //     });
-        //     graffitiPen = true;
-        // }
+        if (penIsTook && (!graffitiPen)) { //&&clientStatus.includes("computer1 finished")&&clientStatus.includes("computer4 finished")
+            socket.in("web").emit('pen', {
+                'pen': true
+            });
+            graffitiPen = true;
+        }
     }, 1000);
 
     //get computer3 makey makey
-    // var com3_status = false;
-    // socket.in("computer3").on('forCom3', function (data) {
-    //     if (!com3_status) {
-    //         // console.log(data.sense);
-    //         socket.in("web").emit('playVideo3', {
-    //             'playVideo3': 1
-    //         });
-    //         com3_status = true;
-    //     }
-    // });
-    socket.in("localclient").on('shortcut',function(data){
-        console.log('got it');
-        socket.in("web").emit('playVideo3', {
-            'playVideo3': 1
-        });
+    var com3_status = false;
+    socket.in("computer3").on('forCom3', function (data) {
+        // if (!com3_status) {
+            console.log("get makey:"+data.sense);
+            socket.in("web").emit('playVideo3', {
+                'playVideo3': 1
+            });
+            com3_status = true;
+        // }
     });
+    // socket.in("localclient").on('shortcut',function(data){
+    //     console.log('got it');
+    //     socket.in("web").emit('playVideo3', {
+    //         'playVideo3': 1
+    //     });
+    // });
 
     var graIsfinished=false;
     socket.in("computer3").on('finishedGraffiti', function (data) {

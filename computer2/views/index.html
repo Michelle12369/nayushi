@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>movie</title>
@@ -10,12 +11,20 @@
     <!-- <script src="kinect-graffitti.js"></script> -->
 </head>
 <style>
-    body{
+    body {
         background: black;
     }
+
+    #graffiti {
+        transition: transform 1s ease-out, opacity 1s ease;
+    }
+    .canvas-dis {
+        transform: rotate(10deg) scale(0.7);
+        border: solid 5px white;
+    }
 </style>
+
 <body>
-    <script src="html2canvas.js"></script>
     <script>
         var socket = io.connect();
         // var socket = io.connect('http://127.0.0.1:3001');
@@ -26,78 +35,80 @@
             });
         });
 
-        
-        $(document).ready(function () {
-            // socket.on('pen',function(data){
-            //     console.log("pen:"+data.pen);
-            //     console.log('請拿起左邊櫃子上的筆');
-            //     $("#container").html(
-            //         `<div id="alert" style="color:white;">請拿起左邊櫃子上的筆</div>`
-            //     );
 
+        $(document).ready(function () {
+            socket.on('pen',function(data){
+                console.log("pen:"+data.pen);
+                console.log('請拿起左邊櫃子上的筆');
+                $("#container").html(
+                    `<div id="alert" style="color:white;">請拿起左邊櫃子上的筆</div>`
+                );
+                });
                 socket.on('playVideo3', function (data) {
+                    console.log("playVideo:" + data.playVideo3);
                     if (data.playVideo3 == 1) {
-                        console.log("playVideo:"+data.playVideo3);
+                        console.log("playVideo:" + data.playVideo3);
                         $("#container").html(
-                            `<video id="v1" controls="controls" src="video.mp4"></video>`
+                            `<video id="v1" controls="controls" src="video.mp4" style="display:block;"></video>`
                         );
-                        $("#v1")[0].style.width=window.innerWidth;
+                        document.querySelector('#v1').width = window.innerWidth;
                         $("#v1")[0].play();
                         $("#v1").on('ended', function () {
                             console.log('video finished');
                             $("#container").html(
-                                    `
-                                 <div id="canvasChoices">
-                                    <div>
-                                    <div id="undo" class="choice choiceImg"></div>
-                                    <div id="pencil" class="choice choiceImg"></div>
-                                    <div id="spray" class="choice choiceImg"></div>
-                                    <div id="text" class="choice choiceImg"></div>
-                                    <div class="choice color black" data-color="black"></div>
-                                    <div class="choice color blue" data-color="blue"></div>
-                                    <div class="choice color green" data-color="green"></div>
-                                    <div class="choice color red" data-color="red"></div>
-                                    <div class="choice color white" data-color="white"></div>
-                                    <div id="clear"  class="choice choiceImg">clear</div>
-                                    </div>
-                                </div>
-                                <canvas id="graffiti" width="100%"></canvas>
-                                <button id="clickme">Click me</button>
                                 `
-                                );
+                                    <div id="canvasChoices">
+                                        <div>
+                                        <div id="undo" class="choice choiceImg"></div>
+                                        <div id="pencil" class="choice choiceImg"></div>
+                                        <div id="spray" class="choice choiceImg"></div>
+                                        <div id="text" class="choice choiceImg"></div>
+                                        <div class="choice color black" data-color="black"></div>
+                                        <div class="choice color blue" data-color="blue"></div>
+                                        <div class="choice color green" data-color="green"></div>
+                                        <div class="choice color red" data-color="red"></div>
+                                        <div class="choice color white" data-color="white"></div>
+                                        <div id="clear"  class="choice choiceImg">clear</div>
+                                        </div>
+                                    </div>
+                                    <canvas id="graffiti" width="100%"></canvas>
+                                    <button id="clickme">Click me</button>
+                                    `
+                            );
                             $(document.body).append('<script src="firebase.js"><' +
-                                '/script><script src="Graffiti.js"><' + '/script><script src="app.js"><' +
+                                '/script><script src="Graffiti.js"><' +
+                                '/script><script src="app.js"><' +
                                 '/script>');
-                            $('#clickme').on('click',myfunction);
+                            $('#clickme').on('click', myfunction);
                         });
                     }
-                });
-            // });
+                
+            });
 
-        socket.on('stopGra',function(){
-            myfunction();
-        });
-            
-        function myfunction(){
-            // html2canvas(document.body, {
-            //     onrendered: function(canvas) {
-            //         document.body.appendChild(canvas);
-            //         console.log(canvas);
-            //     },
-            //     width: 300,
-            //     height: 300
-            // });
-                var canvas=document.querySelector('canvas');
-                var myImage = canvas.toDataURL("image/png");
-                window.open(myImage);
-                $("#container").html(
-                     `<video id="v1" controls="controls" src="shin.mp4" autoplay></video>`
-                );
+            socket.on('stopGra', function () {
+                myfunction();
+            });
+
+            function myfunction() {
+                $("#canvasChoices").remove();
+                document.querySelector('canvas').classList.add('canvas-dis');
+                setInterval(time,30);
+                function time(){
+                    document.querySelector('canvas').style.opacity-=0.01;
+                }
+                setTimeout(function () {
+                    clearInterval(time);
+                    document.querySelector('canvas').remove();
+                    $("#container").append(
+                        `<video id="v1" controls="controls" src="shin.mp4" autoplay style="display:block;"></video>`
+                    );
+                    document.querySelector('#v1').width = window.innerWidth;
+                }, 3000);
             }
         });
     </script>
     <div id="container">
-    	
+
     </div>
 </body>
 
