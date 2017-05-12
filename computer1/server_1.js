@@ -3,7 +3,7 @@ var five = require("johnny-five");
 var setClient1 = require('socket.io-client');
 
 // 記得要改ip位址
-var client1 = setClient1.connect('http://192.168.1.87:3002');
+var client1 = setClient1.connect('http://140.119.38.178:3002');
 var express = require('express'),
     io = require('socket.io'),
     http = require('http');
@@ -81,8 +81,17 @@ listener.sockets.on('connection', function(socket) {
         client1.emit('computer1Finished',{
             'computer1Finished':true
         });
+        process.exit(0);
+    });
+    
+    client1.on('control-cp1-sofa',function(data){
+        console.log("sss");
+        socket.emit('playVideo1', { //send message to client
+            'playVideo1': true
+        });
     });
 
 });
+
 
 server.listen(3001);

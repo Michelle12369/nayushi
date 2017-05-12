@@ -20,19 +20,20 @@
 
     $(document).ready(function() {
         // 感測器感應到時，會傳true值
-
             socket.on('playVideo1', function(data) {
                 console.log(data.playVideo1);
                 if (data.playVideo1 == true && playonce ==true) {
                     $('body').append('<video id="v1" width="100%" height="100%" controls="controls" src="video.mp4"></video>');
                     $("#v1")[0].play();
                     playonce = false;
-                            // 播完影片後，傳送值回server
-                            $('#v1').on('ended', function() {
-                                socket.emit('video1End', { //send news to server
-                                    video1End: true
-                                });
-                            });
+                    // 播完影片後，傳送值回server
+                    $('#v1').on('ended', function() {
+                        socket.emit('video1End', { //send news to server
+                            video1End: true
+                        });
+                        $('#v1').remove();
+                        $('#circle').remove();
+                    });
                 }
             });
 
@@ -59,7 +60,6 @@
             z-index: 10;
         }
     </style>
-    <p>rebase</p>
     <!-- 剪好的影片最後一幕是黑色的 -->
     <div id="circle"></div>
     <!-- <video id="v1" width="100%" height="100%" controls="controls" src="video.mp4">
