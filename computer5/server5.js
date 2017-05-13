@@ -1,6 +1,6 @@
 // require
 var setClient5 = require('socket.io-client');
-var client5 = setClient5.connect('http://192.168.1.87:3002');
+var client5 = setClient5.connect('http://192.168.1.171:3002');
 // var express = require('express'),
 //     io = require('socket.io'),
 //     http = require('http'),
@@ -40,16 +40,17 @@ if(kinect.open()) {
 client5.on('connect', function() {
 	console.log("socket5 connected");
     client5.emit('room', { room: 'computer5' });
-}
+});
 kinect.on('bodyFrame', function(bodyFrame){
-	client5.emit('kinect',bodyFrame);
+	client5.emit('bodyFrame',bodyFrame);
+	// console.log(bodyFrame);
 });
 // listener.sockets.on('connection', function(socket) {
 // 	kinect.on('bodyFrame', function(bodyFrame){
 // 	    socket.emit('bodyFrame', bodyFrame);
 // 	});
 
-// 	kinect.openBodyReader();
+	kinect.openBodyReader();
 // });
 
 // server.listen(3005);
