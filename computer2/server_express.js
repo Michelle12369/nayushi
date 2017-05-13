@@ -49,7 +49,7 @@ listener.sockets.on('connection', function (socket) {
         console.log(`${data.room} has joined the room`);
     })
     //kinect
-    socket.in("computer5").on('bodyFrame', function (bodyFrame) {
+    socket.in("computer3").on('bodyFrame', function (bodyFrame) {
         // console.log(bodyFrame);
         socket.in("kinectweb").emit('kinect',bodyFrame);
     }); 

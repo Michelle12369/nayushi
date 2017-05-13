@@ -17,8 +17,8 @@
 			position:absolute;
 			top:0;
 			left:0;
-			width:30px;
-			height:30px;
+			width:25px;
+			height:25px;
 			background: #BADA55;
 			border-radius: 100%;
 		}
@@ -44,7 +44,7 @@
  		var ctx = canvas.getContext('2d'); 
 		ctx.lineJoin = 'round';
     	ctx.lineCap = 'round';
-		ctx.lineWidth=30;
+		ctx.lineWidth=25;
  		ctx.strokeStyle='#BADA55';
 
  		var lastX=0;
@@ -104,15 +104,14 @@
  			} 
  		} 
 		function updateLeftHandState(spineJointPoint,leftHandJointPoint) {
-			var leftHandPositon = leftHandJointPoint.depthX*100;
-			var torsoPositon = spineJointPoint.depthX*100;
+			var leftHandPositon = leftHandJointPoint.depthX*1000;
+			var torsoPositon = spineJointPoint.depthX*1000;
 			console.log(torsoPositon+','+leftHandPositon);
 			var relativePosition = leftHandPositon - torsoPositon;
 			var oldspeed = relativePosition;
 			var relativeSpeed = relativePosition - oldspeed;
 			if(relativeSpeed <= -1) {
     			console.log("Swipe left");
-				
 			}
 			if(relativeSpeed >= 1) {
 				console.log("Swipe right");
