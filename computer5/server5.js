@@ -4,7 +4,7 @@ var client5 = setClient5.connect('http://192.168.1.171:3002');
 // var express = require('express'),
 //     io = require('socket.io'),
 //     http = require('http'),
-var Kinect2 = require('kinect2');;
+var Kinect2 = require('kinect2');
 
 // express define
 // var app = express();
