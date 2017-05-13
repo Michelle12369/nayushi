@@ -1,7 +1,7 @@
 // require
 var five = require("johnny-five");
 var setClient4 = require('socket.io-client');
-var client4 = setClient4.connect('http://192.168.1.87:3002');
+var client4 = setClient4.connect('http://140.119.38.178:3002');
 var express = require('express'),
     io = require('socket.io'),
     http = require('http');
@@ -48,77 +48,79 @@ listener.sockets.on('connection', function(socket) {
     // var board = new five.Board();
     // board.on("ready", function() {
     // });
-    var ports = [
-        { id: "A", port: "/dev/cu.usbmodem1411" },
-        { id: "B", port: "/dev/cu.usbmodem1421" }
-    ];
-    var board2 = new five.Boards(ports);
-    board2.on("ready", function() {
-        console.log(this[0].port);
-        console.log(this[1].port);
-        var medicine = this[0];
-        var telephone = this[1];
+    
+    // var ports = [
+    //     { id: "A", port: "/dev/cu.usbmodem1411" },
+    //     { id: "B", port: "/dev/cu.usbmodem1421" }
+    // ];
+    // var board2 = new five.Boards(ports);
+    // board2.on("ready", function() {
+    //     console.log(this[0].port);
+    //     console.log(this[1].port);
+    //     var medicine = this[0];
+    //     var telephone = this[1];
 
-        // http://johnny-five.io/examples/servo/
-        // 馬達旋轉
-        var servo = new five.Servo({ pin: 10, board: medicine });
-        // this.repl.inject({
-        //     servo: servo
-        // });
-        servo.sweep();
+    //     // http://johnny-five.io/examples/servo/
+    //     // 馬達旋轉
+    //     var servo = new five.Servo({ pin: 10, board: medicine });
+    //     // this.repl.inject({
+    //     //     servo: servo
+    //     // });
+    //     servo.sweep();
 
-        // 壓力感測器感測
-        var sensor = new five.Sensor({ pin: "A0", board: medicine });
+    //     // 壓力感測器感測
+    //     var sensor = new five.Sensor({ pin: "A0", board: medicine });
+        
+    //     client4.on('control-cp4-medicine',function(data){
+    //         servo.stop();
+    //     });
+    //     // 壓力感測器改變時，會觸發此函式
+    //     sensor.on("change", function(value) {
+    //         // console.log(value);
+    //         if (value < 30) {
+    //             move = false;
+    //             servo.stop();
+    //             // 告知網頁，把照著藥罐的圈圈關掉
+    //             if (!medReady) {
+    //                 socket.emit('medicineCircle', { //send message to client
+    //                     'medicineCircle': true
+    //                 });
+    //                 medReady = true;
+    //             }
+    //         } else if (value >= 30) {
+    //             // servo.sweep();
+    //             weight = value;
+    //         }
+    //     });
+    //     // 第二塊板子 電話
+    //     var proximity = new five.Proximity({
+    //         controller: "HCSR04",
+    //         pin: 7,
+    //         board: telephone
+    //     });
+    //     var phone_sensor = new five.Sensor({ pin: "A0", board: telephone });
+    //     phone_sensor.scale([0,255]).on("data", function() {
+    //         phone = this.scaled;
 
-        // 壓力感測器改變時，會觸發此函式
-        sensor.on("change", function(value) {
-            // console.log(value);
-            if (value < 30) {
-                move = false;
-                servo.stop();
-                // 告知網頁，把照著藥罐的圈圈關掉
-                if (!medReady) {
-                    socket.emit('medicineCircle', { //send message to client
-                        'medicineCircle': true
-                    });
-                    medReady = true;
-                }
-            } else if (value >= 30) {
-                // servo.sweep();
-                weight = value;
-            }
-        });
-        // 第二塊板子 電話
-        var proximity = new five.Proximity({
-            controller: "HCSR04",
-            pin: 7,
-            board: telephone
-        });
-        var phone_sensor = new five.Sensor({ pin: "A0", board: telephone });
-        phone_sensor.scale([0,255]).on("data", function() {
-            console.log("phone_sensor:"+this.scaled);
-            phone = this.scaled;
-
-        });
-        proximity.on("data", function() {
-            // console.log("  cm  : ", this.cm);
-            distance = this.cm;
-        });
-        setInterval(function() {
-            if (distance < 30 && !musicReady) {
-                socket.emit('playMusic', { //send message to client
-                    'playMusic': true
-                });
-                musicReady = true;
-            }
-            if (phone < 40 && !phoneReady) {
-                socket.emit('playTalk', {
-                    'playTalk': true
-                });
-                phoneReady = true;
-            }
-        }, 1000);
-    })
+    //     });
+    //     proximity.on("data", function() {
+    //         distance = this.cm;
+    //     });
+    //     setInterval(function() {
+    //         if (distance < 30 && !musicReady) {
+    //             socket.emit('playMusic', { //send message to client
+    //                 'playMusic': true
+    //             });
+    //             musicReady = true;
+    //         }
+    //         if (phone < 40 && !phoneReady) {
+    //             socket.emit('playTalk', {
+    //                 'playTalk': true
+    //             });
+    //             phoneReady = true;
+    //         }
+    //     }, 1000);
+    // })
 
     var ok = false;
     var talkReady = false;
@@ -132,8 +134,30 @@ listener.sockets.on('connection', function(socket) {
                 'computer4Finished': true
             });
             ok = true;
+            // server.close();
+            process.exit(0);
         }
     }, 1000);
+
+
+    // control part
+    client4.on('control-cp4-medicine',function(data){
+        socket.emit('medicineCircle', { //send message to client
+            'medicineCircle': true
+        });
+    });
+    client4.on('control-cp4-ring',function(data){
+        socket.emit('playMusic', { //send message to client
+            'playMusic': true
+        });
+    });
+    client4.on('control-cp4-talk',function(data){
+        socket.emit('playTalk', { //send message to client
+            'playTalk': true
+        });
+    });
+
+
 });
 
 server.listen(3004);

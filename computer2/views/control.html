@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Control</title>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.js"></script>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1, maximum-scale=1, user-scalable=0">
+
+</head>
+<style>
+	body{
+		background-color: pink;
+	}
+	h1{
+		text-align: center;
+	}
+	button{
+		width: 100%;
+		height:60px;
+		display: block;
+		margin: 50px auto;
+		font-size: 16pt;
+		background-color: white;
+		border-radius: 20px;
+	}
+</style>
+<body>
+	<h1>控制器</h1>
+	<button id="cp1-sofa">computer1 沙發影片</button>
+	<button id="cp4-medicine">computer4 藥罐停止</button>
+	<button id="cp4-ring">computer4 電話鈴響</button>
+	<button id="cp4-talk">computer4 電話發出人聲</button>
+	<script>
+		var socket = io.connect();
+		socket.on('connect', function () {
+            socket.emit('room', {
+                room: 'control'
+            });
+        });
+
+		$('#cp1-sofa').click(function(){
+			socket.emit('control-cp1-sofa',{
+        		'control-cp1-sofa':true
+        	});
+		});
+		$('#cp4-medicine').click(function(){
+			socket.emit('control-cp4-medicine',{
+        		'control-cp1':true
+        	});
+		});
+		$('#cp4-ring').click(function(){
+			socket.emit('control-cp4-ring',{
+        		'control-cp4-ring':true
+        	});
+		});
+		$('#cp4-talk').click(function(){
+			socket.emit('control-cp4-talk',{
+        		'control-cp4-talk':true
+        	});
+		});
+	</script>
+</body>
+</html>

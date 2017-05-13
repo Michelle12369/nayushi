@@ -19,6 +19,9 @@ app.set('view engine', 'html');
 router.get('/', function (req, res, next) {
     res.render('index');
 });
+router.get('/control.html', function (req, res, next) {
+    res.render('control');
+});
 router.get('/test.html', function (req, res, next) {
     res.render('test');
 });
@@ -27,6 +30,7 @@ router.get('/gra.html', function (req, res, next) {
 });
 
 app.use('/', router);
+// app.use('/control.html', router);
 
 // socket
 var listener = io.listen(server);
@@ -103,8 +107,42 @@ listener.sockets.on('connection', function (socket) {
             clientStatus.push("computer4 finished");
         }
     });
-
-
+    var controlpart = [
+        {
+            machine:'control-cp1-sofa'
+        },{
+            machine:'control-cp4-medicine'
+        },{
+            machine:'control-cp4-ring'
+        },{
+            machine:'control-cp4-talk'
+        }
+    ]
+    // Control all the machine
+    socket.in('control').on(controlpart[0].machine,function(data){
+        var x = controlpart[0].machine;
+        socket.in('computer1').emit(controlpart[0].machine, {
+            x : true
+        });
+    });
+    socket.in('control').on(controlpart[1].machine,function(data){
+        var x = controlpart[1].machine;
+        socket.in('computer4').emit(controlpart[1].machine, {
+            x : true
+        });
+    });
+    socket.in('control').on(controlpart[2].machine,function(data){
+        var x = controlpart[2].machine;
+        socket.in('computer4').emit(controlpart[2].machine, {
+            x : true
+        });
+    });
+    socket.in('control').on(controlpart[3].machine,function(data){
+        var x = controlpart[3].machine;
+        socket.in('computer4').emit(controlpart[3].machine, {
+            x : true
+        });
+    });
 });
 
 server.listen(3002);
