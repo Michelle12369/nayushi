@@ -2,10 +2,11 @@ var setClient3 = require('socket.io-client');
 // var five = require("johnny-five"),
 //   fsr;
 
-var client3 = setClient3.connect('http://140.119.38.219:3002/');
+var client3 = setClient3.connect('http://140.119.38.82:3002/');
 var express = require('express'),
   io = require('socket.io'),
   http = require('http');
+  Kinect2 = require('kinect2');;
 
 // express define
 var app = express();
@@ -36,14 +37,15 @@ client3.on('connect', function () {
 
 listener.sockets.on('connection', function (socket) {
   socket.on('keyUp', function (data) {
-    console.log(data);
+    console.log(data.keyUp);
     if(data.keyUp==="up"){
       client3.emit('forCom3', { 
        sense: 1
       });
     }
   });
-  socket.on('keydown', function (data) {
+  socket.on('keyDown', function (data) {
+    console.log(data.keyDown);
     if(data.keyDown==="down"){
       client3.emit('finishedGraffiti', { 
        finishedGraffiti: true
@@ -53,6 +55,16 @@ listener.sockets.on('connection', function (socket) {
 });
 
 server.listen(3003);
+
+
+//kinect2
+var kinect = new Kinect2();
+if(kinect.open()) {
+    console.log("Kinect opened!");
+}
+kinect.on('bodyFrame', function(bodyFrame){
+	client3.emit('kinect',bodyFrame);
+});
 
 // (new five.Board()).on("ready", function () {
 
