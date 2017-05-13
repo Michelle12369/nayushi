@@ -74,12 +74,6 @@ listener.sockets.on('connection', function (socket) {
             com3_status = true;
         }
     });
-    // socket.in("localclient").on('shortcut',function(data){
-    //     console.log('got it');
-    //     socket.in("web").emit('playVideo3', {
-    //         'playVideo3': 1
-    //     });
-    // });
 
     var graIsfinished=false;
     socket.in("computer3").on('finishedGraffiti', function (data) {
