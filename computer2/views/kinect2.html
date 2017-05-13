@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>kinect</title>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.js"></script>
+	<style>
+		body{
+			position: relative;
+		}
+		canvas{
+			position:absolute;
+			top:0;
+			left:0;
+		}
+		#pointer{
+			position:absolute;
+			top:0;
+			left:0;
+			width:25px;
+			height:25px;
+			background: #BADA55;
+			border-radius: 100%;
+		}
+	</style>
+</head>
+<body>
+	<canvas id="bodyCanvas" width="512" height="424"></canvas>
+	<div id="pointer"></div>
+	<script>	
+		var socket = io.connect();
+		socket.on('connect', function () {
+            socket.emit('room', {
+                room: 'kinectweb'
+            });
+        });
+
+		var pointer=document.querySelector('#pointer');
+		var canvas = document.querySelector('#bodyCanvas'); 
+		canvas.width = window.innerWidth;
+    	canvas.height = window.innerHeight;
+		console.log(window.innerWidth);
+		console.log(window.innerHeight);
+ 		var ctx = canvas.getContext('2d'); 
+		ctx.lineJoin = 'round';
+    	ctx.lineCap = 'round';
+		ctx.lineWidth=25;
+ 		ctx.strokeStyle='#BADA55';
+
+ 		var lastX=0;
+  		var lastY=0;
+  		var isDrawing=false;
+  		function draw(e){
+ 			if (!isDrawing){return};
+ 			ctx.beginPath();
+ 			ctx.moveTo(lastX,lastY);
+ 			ctx.lineTo(e.offsetX,e.offsetY);
+ 			ctx.stroke();
+ 			lastX=e.offsetX;
+ 			lastY=e.offsetY;
+ 		}
+ 		canvas.addEventListener('mousemove',draw);
+ 		canvas.addEventListener('mousedown',function(e){
+ 			isDrawing=true;
+ 			lastX=e.offsetX;
+ 			lastY=e.offsetY;
+ 		});
+ 		canvas.addEventListener('mouseup',function(){
+ 			isDrawing=false;
+ 		});
+ 		canvas.addEventListener('mouseout',function(){
+ 			isDrawing=false;
+ 		});
+
+
+ 		var colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#00ffff', '#ff00ff']; 
+ 
+ 		// handstate circle size 
+ 		var HANDSIZE = 20; 
+  
+ 		// closed hand state color 
+ 		var HANDCLOSEDCOLOR = "red"; 
+  
+ 		// open hand state color 
+ 		var HANDOPENCOLOR = "green"; 
+  
+ 		// lasso hand state color 
+ 		var HANDLASSOCOLOR = "blue"; 
+  
+ 		function updateHandState(handState, jointPoint) { 
+ 			switch (handState) { 
+ 				case 3: 
+ 					drawHand(jointPoint, HANDOPENCOLOR); 
+ 				break; 
+  
+ 				case 2: 
+ 					// drawHand(jointPoint, HANDOPENCOLOR); 
+					 drawDiv(jointPoint);
+ 				break; 
+  
+ 				case 4: 
+ 					drawHand(jointPoint, HANDOPENCOLOR); 
+ 				break; 
+ 			} 
+ 		} 
+		function updateLeftHandState(spineJointPoint,leftHandJointPoint) {
+			var leftHandPositon = leftHandJointPoint.depthX*1000;
+			var torsoPositon = spineJointPoint.depthX*1000;
+			console.log(torsoPositon+','+leftHandPositon);
+			var relativePosition = leftHandPositon - torsoPositon;
+			var oldspeed = relativePosition;
+			var relativeSpeed = relativePosition - oldspeed;
+			if(relativeSpeed <= -1) {
+    			console.log("Swipe left");
+			}
+			if(relativeSpeed >= 1) {
+				console.log("Swipe right");
+			}
+		}
+
+		function drawDiv(jointPoint){
+			pointer.style.display='block';
+			pointer.style.top=`${jointPoint.depthY * 726}px`;
+			pointer.style.left=`${jointPoint.depthX * 1280}px`;
+			lastX=jointPoint.depthX * 1280;
+ 			lastY=jointPoint.depthY * 726;
+		}
+ 		function drawHand(jointPoint, handColor) { 
+ 			// draw semi transparent hand cicles 
+ 			// ctx.globalAlpha = 0.75; 
+ 			// ctx.beginPath(); 
+ 			// ctx.fillStyle = handColor; 
+ 			// ctx.arc(jointPoint.depthX * 512, jointPoint.depthY * 424, HANDSIZE, 0, Math.PI * 2, true); 
+ 			// ctx.fill(); 
+ 			// ctx.closePath(); 
+ 			// ctx.globalAlpha = 1; 
+			pointer.style.display='none';
+ 			ctx.strokeStyle=handColor;
+ 			ctx.beginPath();
+ 			ctx.moveTo(lastX,lastY);
+ 			ctx.lineTo(jointPoint.depthX * 1280,jointPoint.depthY * 726);
+ 			ctx.stroke();
+ 			lastX=jointPoint.depthX * 1280;
+ 			lastY=jointPoint.depthY * 726;
+ 		} 
+ 		
+ 		
+  
+ 		socket.on('kinect', function(bodyFrame){ 
+ 			// ctx.clearRect(0, 0, canvas.width, canvas.height); 
+ 			var index = 0; 
+ 			bodyFrame.bodies.forEach(function(body){ 
+ 				if(body.tracked) { 
+ 					// for(var jointType in body.joints) { 
+ 						// var joint = body.joints[jointType]; 
+ 						// ctx.fillStyle = colors[index]; 
+						// ctx.fillRect(joint.depthX * 512, joint.depthY * 424, 10, 10); 
+ 					// } 
+ 					//draw hand states 
+ 					updateLeftHandState(body.joints[1],body.joints[7]); 
+ 					updateHandState(body.rightHandState, body.joints[11]); 
+ 					index++; 
+ 				} 
+ 			}); 
+ 		}); 
+
+ 		
+	</script>
+	
+</body>
+</html>
