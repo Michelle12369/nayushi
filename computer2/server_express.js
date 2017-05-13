@@ -66,20 +66,14 @@ listener.sockets.on('connection', function (socket) {
     //get computer3 makey makey
     var com3_status = false;
     socket.in("computer3").on('forCom3', function (data) {
-        // if (!com3_status) {
+        if (!com3_status) {
             console.log("get makey:"+data.sense);
             socket.in("web").emit('playVideo3', {
                 'playVideo3': 1
             });
             com3_status = true;
-        // }
+        }
     });
-    // socket.in("localclient").on('shortcut',function(data){
-    //     console.log('got it');
-    //     socket.in("web").emit('playVideo3', {
-    //         'playVideo3': 1
-    //     });
-    // });
 
     var graIsfinished=false;
     socket.in("computer3").on('finishedGraffiti', function (data) {

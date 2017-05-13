@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>HTML5 Canvas</title>
+</head>
+
+<body>
+  <canvas id="draw" width="800" height="800"></canvas>
+  <script>
+    const canvas = document.querySelector('#draw');
+    const ctx = canvas.getContext('2d');//一般2d canvas的話就要這行，然後畫畫的都在ctx裡面畫
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    ctx.strokeStyle = '#BADA55';
+    // ctx.lineJoin = 'round'; //end of the line will be round
+    // ctx.lineCap = 'round'; //筆畫是圓形的
+
+    let isDrawing = false;
+    let lastX = 0; //紀錄前一個點的位置，用來變成現在這個點的初始位置
+    let lastY = 0;
+    // let hue = 0; //設定筆畫色彩。由於hsl的第一個值是用來控制顏色，故一直++會一直改變顏色
+    // let direction = true; //用來控制筆畫要變粗還是變細
+
+    function draw(e) {
+      if (!isDrawing) return;
+      // ctx.strokeStyle = `hsl(${hue},100%,50%)`;
+      ctx.beginPath();
+      ctx.moveTo(lastX, lastY);//線的起點
+      ctx.lineTo(e.offsetX, e.offsetY);//線的終點
+      ctx.stroke();//畫線
+      [lastX, lastY] = [e.offsetX, e.offsetY]; //把現在的mouse的位置存到lastX和lastY中
+
+      //控制筆畫顏色
+      // hue++;
+      // if (hue > 360) {
+      //   hue = 0;
+      // }
+
+      //控制筆畫粗細
+      // if (ctx.lineWidth >= 100 || ctx.lineWidth <= 1) {
+      //   direction = !direction;
+      // }
+      // if (direction) {
+      //   ctx.lineWidth++;
+      // } else {
+      //   ctx.lineWidth--;
+      // }
+
+    }
+    canvas.addEventListener('mousemove', draw); //在mouse move的時候會一直不斷呼叫draw
+    canvas.addEventListener('mousedown', (e) => {
+      isDrawing = true;
+      [lastX, lastY] = [e.offsetX, e.offsetY]; //在按下去的瞬間把mouse的位置存到lastX和lastY中
+    });
+    canvas.addEventListener('mouseup', () => isDrawing = false);
+    canvas.addEventListener('mouseout', () => isDrawing = false);
+  </script>
+
+  <style>
+    html,
+    body {
+      margin: 0;
+    }
+  </style>
+
+</body>
+
+</html>
