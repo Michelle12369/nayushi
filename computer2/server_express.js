@@ -22,12 +22,6 @@ router.get('/', function (req, res, next) {
 router.get('/control.html', function (req, res, next) {
     res.render('control');
 });
-router.get('/test.html', function (req, res, next) {
-    res.render('test');
-});
-router.get('/gra.html', function (req, res, next) {
-    res.render('gra');
-});
 router.get('/kinect2.html',function (req, res, next) {
     res.render('kinect2');
 });
@@ -48,8 +42,14 @@ listener.sockets.on('connection', function (socket) {
         socket.join(data.room);
         console.log(`${data.room} has joined the room`);
     })
+    
     //kinect
     socket.in("computer3").on('bodyFrame', function (bodyFrame) {
+        // console.log(bodyFrame);
+        socket.in("web").emit('kinect',bodyFrame);
+    }); 
+
+    socket.in("computer5").on('bodyFrame', function (bodyFrame) {
         // console.log(bodyFrame);
         socket.in("kinectweb").emit('kinect',bodyFrame);
     }); 
