@@ -28,6 +28,9 @@ router.get('/test.html', function (req, res, next) {
 router.get('/gra.html', function (req, res, next) {
     res.render('gra');
 });
+router.get('/kinect2.html',function (req, res, next) {
+    res.render('kinect2');
+});
 
 app.use('/', router);
 // app.use('/control.html', router);
@@ -45,6 +48,11 @@ listener.sockets.on('connection', function (socket) {
         socket.join(data.room);
         console.log(`${data.room} has joined the room`);
     })
+    //kinect
+    socket.in("computer5").on('bodyFrame', function (bodyFrame) {
+        // console.log(bodyFrame);
+        socket.in("kinectweb").emit('kinect',bodyFrame);
+    }); 
 
     //test whether computer 1 and 4 are completed
     var penIsTook = false;
