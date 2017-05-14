@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<title>kinect</title>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.js"></script>
+	<style>
+		body {
+			position: relative;
+			background:black;
+		}
+
+		canvas {
+			position: absolute;
+			top: 0;
+			left: 0;
+			background: url(/img/wall.jpg);
+			/*transition: transform 1s ease-out, opacity 1s ease;*/
+		}
+
+		#pointer {
+			position: absolute;
+			top: 100px;
+			left: 100px;
+			width: 25px;
+			height: 25px;
+			background: black;
+			border-radius: 100%;
+		}
+		#colorTips{
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 25px;
+			height: 25px;
+			background:green;
+		}
+	</style>
+</head>
+
+<body>
+	<canvas id="bodyCanvas" width="512" height="424"></canvas>
+	<div id="pointer"></div>
+	<div id="colorTips"></div>
+	<script>
+		var socket = io.connect();
+		socket.on('connect', function () {
+			socket.emit('room', {
+				room: 'kinectweb'
+			});
+		});
+	</script>
+	<script src="kinect2.js"></script>
+</body>
+
+</html>

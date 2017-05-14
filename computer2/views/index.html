@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>movie</title>
-    <link rel="stylesheet" href="app.css" />
+    <!--<link rel="stylesheet" href="app.css" />-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.js"></script>
     <!-- <script type="text/javascript" src="Kinect-1.8.0.js"></script> -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.js"></script>
@@ -13,14 +13,39 @@
 <style>
     body {
         background: black;
+        position: relative;
     }
 
-    #graffiti {
-        transition: transform 1s ease-out, opacity 1s ease;
-    }
     .canvas-dis {
         transform: rotate(10deg) scale(0.7);
         border: solid 5px white;
+    }
+
+    canvas {
+        position: absolute;
+        top: 0;
+        left: 0;
+        transition: transform 1.5s ease-out, opacity 1.5s ease;
+        background: url(img/wall.jpg);
+    }
+
+    #pointer {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 25px;
+        height: 25px;
+        background: black;
+        border-radius: 100%;
+    }
+
+    #colorTips {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 25px;
+        height: 25px;
+        background: green;
     }
 </style>
 
@@ -37,8 +62,8 @@
 
 
         $(document).ready(function () {
-            socket.on('pen',function(data){
-                console.log("pen:"+data.pen);
+            socket.on('pen', function (data) {
+                console.log("pen:" + data.pen);
                 console.log('請拿起左邊櫃子上的筆');
                 $("#container").html(
                     `<div id="alert" style="color:white;">請拿起左邊櫃子上的筆</div>`
@@ -57,29 +82,13 @@
                             console.log('video finished');
                             $("#container").html(
                                 `
-                                    <div id="canvasChoices">
-                                        <div>
-                                        <div id="undo" class="choice choiceImg"></div>
-                                        <div id="pencil" class="choice choiceImg"></div>
-                                        <div id="spray" class="choice choiceImg"></div>
-                                        <div id="text" class="choice choiceImg"></div>
-                                        <div class="choice color black" data-color="black"></div>
-                                        <div class="choice color blue" data-color="blue"></div>
-                                        <div class="choice color green" data-color="green"></div>
-                                        <div class="choice color red" data-color="red"></div>
-                                        <div class="choice color white" data-color="white"></div>
-                                        <div id="clear"  class="choice choiceImg">clear</div>
-                                        </div>
-                                    </div>
-                                    <canvas id="graffiti" width="100%"></canvas>
-                                    <button id="clickme">Click me</button>
+                                <canvas id="bodyCanvas" width="512" height="424"></canvas>
+	                            <div id="pointer"></div>
+                                <div id="colorTips"></div>
                                     `
                             );
-                            $(document.body).append('<script src="firebase.js"><' +
-                                '/script><script src="Graffiti.js"><' +
-                                '/script><script src="app.js"><' +
+                            $(document.body).append('<script src="kinect2.js"><' +
                                 '/script>');
-                            $('#clickme').on('click', myfunction);
                         });
                     }
                 });
@@ -90,11 +99,13 @@
             });
 
             function myfunction() {
-                $("#canvasChoices").remove();
+                $("#pointer").remove();
+                $("#colorTips").remove();
                 document.querySelector('canvas').classList.add('canvas-dis');
-                setInterval(time,30);
-                function time(){
-                    document.querySelector('canvas').style.opacity-=0.01;
+                setInterval(time, 30);
+
+                function time() {
+                    document.querySelector('canvas').style.opacity -= 0.01;
                 }
                 setTimeout(function () {
                     clearInterval(time);

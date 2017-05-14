@@ -10,26 +10,37 @@
 </head>
 
 <body>
-
+    <button onclick="myfunction()">拿起筆了</button>
+    <button onclick="myfunction2()">放回筆了</button>
     <script>
         var socket = io.connect();
+        function myfunction() {
+            socket.emit('keyUp', {
+                keyUp: 'up'
+            });
+        }
+
+        function myfunction2() {
+            socket.emit('keyDown', {
+                keyDown: 'down'
+            });
+        }
         window.addEventListener('keyup', function (e) {
             console.log(`keyup:${e.key}`);
-            if(e.key=='ArrowDown'){
+            if (e.key == 'ArrowDown') {
                 socket.emit('keyUp', {
-                    keyUp:'up'
+                    keyUp: 'up'
+                });
+                window.addEventListener('keydown', function (e) {
+                    console.log(`keydown:${e.key}`);
+                    if (e.key == 'ArrowDown') {
+                        socket.emit('keyDown', {
+                            keyDown: 'down'
+                        });
+                    }
                 });
             }
-            window.addEventListener('keydown',function(e){
-                console.log(`keydown:${e.key}`);
-                if(e.key=='ArrowDown'){
-                socket.emit('keyDown', {
-                    keyDown:'down'
-                });
-            }
-            });
         });
-        
     </script>
 </body>
 

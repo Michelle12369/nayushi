@@ -22,11 +22,8 @@ router.get('/', function (req, res, next) {
 router.get('/control.html', function (req, res, next) {
     res.render('control');
 });
-router.get('/test.html', function (req, res, next) {
-    res.render('test');
-});
-router.get('/gra.html', function (req, res, next) {
-    res.render('gra');
+router.get('/kinect2.html',function (req, res, next) {
+    res.render('kinect2');
 });
 
 app.use('/', router);
@@ -45,6 +42,17 @@ listener.sockets.on('connection', function (socket) {
         socket.join(data.room);
         console.log(`${data.room} has joined the room`);
     })
+    
+    //kinect
+    socket.in("computer3").on('bodyFrame', function (bodyFrame) {
+        // console.log(bodyFrame);
+        socket.in("web").emit('kinect',bodyFrame);
+    }); 
+
+    socket.in("computer5").on('bodyFrame', function (bodyFrame) {
+        // console.log(bodyFrame);
+        socket.in("kinectweb").emit('kinect',bodyFrame);
+    }); 
 
     //test whether computer 1 and 4 are completed
     var penIsTook = false;
@@ -66,20 +74,14 @@ listener.sockets.on('connection', function (socket) {
     //get computer3 makey makey
     var com3_status = false;
     socket.in("computer3").on('forCom3', function (data) {
-        // if (!com3_status) {
+        if (!com3_status) {
             console.log("get makey:"+data.sense);
             socket.in("web").emit('playVideo3', {
                 'playVideo3': 1
             });
             com3_status = true;
-        // }
+        }
     });
-    // socket.in("localclient").on('shortcut',function(data){
-    //     console.log('got it');
-    //     socket.in("web").emit('playVideo3', {
-    //         'playVideo3': 1
-    //     });
-    // });
 
     var graIsfinished=false;
     socket.in("computer3").on('finishedGraffiti', function (data) {
