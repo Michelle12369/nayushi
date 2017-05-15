@@ -63,7 +63,7 @@ listener.sockets.on('connection', function (socket) {
     });
 
     setInterval(function () {
-        if (penIsTook && (!graffitiPen)) { //&&clientStatus.includes("computer1 finished")&&clientStatus.includes("computer4 finished")
+        if ((clientStatus.includes("computer1 finished")&&clientStatus.includes("computer4 finished")||penIsTook) && (!graffitiPen)) { //&&clientStatus.includes("computer1 finished")&&clientStatus.includes("computer4 finished") penIsTook
             socket.in("web").emit('pen', {
                 'pen': true
             });
@@ -154,20 +154,22 @@ listener.sockets.on('connection', function (socket) {
     socket.in('control').on(controlpart[4].machine,function(data){
         var x = controlpart[4].machine;
         socket.in("web").emit('pen', {
-                'pen': true
+            'pen': true
         });
     });
     socket.in('control').on(controlpart[5].machine,function(data){
         var x = controlpart[5].machine;
-        socket.in("web").emit('playVideo3', {
-            'playVideo3': 1
-        });
+        socket.in('computer3').emit('startKinect',{startKinect:true});
+        // socket.in("web").emit('playVideo3', {
+        //     'playVideo3': 1
+        // });
     });
     socket.in('control').on(controlpart[6].machine,function(data){
         var x = controlpart[6].machine;
-        socket.in("web").emit('stopGra', {
-            'stopGra': true
-        });
+        socket.in('computer3').emit('stopKinect',{stopKinect:true});
+        // socket.in("web").emit('stopGra', {
+        //     'stopGra': true
+        // });
     });
 });
 
