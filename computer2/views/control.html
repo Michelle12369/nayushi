@@ -31,6 +31,9 @@
 	<button id="cp4-medicine">computer4 藥罐停止</button>
 	<button id="cp4-ring">computer4 電話鈴響</button>
 	<button id="cp4-talk">computer4 電話發出人聲</button>
+	<button id="cp2-get-pen">computer2 顯示拿起筆</button>
+	<button id="cp2-start-video">computer2 播放影片</button>
+	<button id="cp2-stop-gra">computer2 使用完塗鴉牆</button>
 	<script>
 		var socket = io.connect();
 		socket.on('connect', function () {
@@ -57,6 +60,21 @@
 		$('#cp4-talk').click(function(){
 			socket.emit('control-cp4-talk',{
         		'control-cp4-talk':true
+        	});
+		});
+		$('#cp2-get-pen').click(function(){
+			socket.emit('cp2-get-pen',{
+        		'cp2-get-pen':true
+        	});
+		});
+		$('#cp2-start-video').click(function(){
+			socket.emit('cp2-start-video',{
+        		'cp2-start-video':true
+        	});
+		});
+		$('#cp2-stop-gra').click(function(){
+			socket.emit('cp2-stop-gra',{
+        		'cp2-stop-gra':true
         	});
 		});
 	</script>
