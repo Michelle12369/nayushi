@@ -27,13 +27,13 @@
         }
         window.addEventListener('keyup', function (e) {
             console.log(`keyup:${e.key}`);
-            if (e.key == 'ArrowDown') {
+            if (e.key == 'Down') {
                 socket.emit('keyUp', {
                     keyUp: 'up'
                 });
                 window.addEventListener('keydown', function (e) {
                     console.log(`keydown:${e.key}`);
-                    if (e.key == 'ArrowDown') {
+                    if (e.key == 'Down') {
                         socket.emit('keyDown', {
                             keyDown: 'down'
                         });
