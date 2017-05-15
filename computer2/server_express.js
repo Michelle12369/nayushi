@@ -118,6 +118,12 @@ listener.sockets.on('connection', function (socket) {
             machine:'control-cp4-ring'
         },{
             machine:'control-cp4-talk'
+        },{
+            machine:'cp2-get-pen'
+        },{
+            machine:'cp2-start-video'
+        },{
+            machine:'cp2-stop-gra'
         }
     ]
     // Control all the machine
@@ -143,6 +149,24 @@ listener.sockets.on('connection', function (socket) {
         var x = controlpart[3].machine;
         socket.in('computer4').emit(controlpart[3].machine, {
             x : true
+        });
+    });
+    socket.in('control').on(controlpart[4].machine,function(data){
+        var x = controlpart[4].machine;
+        socket.in("web").emit('pen', {
+                'pen': true
+        });
+    });
+    socket.in('control').on(controlpart[5].machine,function(data){
+        var x = controlpart[5].machine;
+        socket.in("web").emit('playVideo3', {
+            'playVideo3': 1
+        });
+    });
+    socket.in('control').on(controlpart[6].machine,function(data){
+        var x = controlpart[6].machine;
+        socket.in("web").emit('stopGra', {
+            'stopGra': true
         });
     });
 });
