@@ -2,8 +2,10 @@ var setClient3 = require('socket.io-client');
 // var five = require("johnny-five"),
 //   fsr;
 
+
 // 記得要改ip位址
 var client3 = setClient3.connect('http://localhost:3002');
+
 var express = require('express'),
   io = require('socket.io'),
   http = require('http');
@@ -36,35 +38,56 @@ client3.on('connect', function () {
   });
 });
 
-listener.sockets.on('connection', function (socket) {
-  socket.on('keyUp', function (data) {
-    console.log(data.keyUp);
-    if(data.keyUp==="up"){
-      client3.emit('forCom3', { 
-       sense: 1
-      });
-      var kinect = new Kinect2();
-      if(kinect.open()) {
-          console.log("Kinect opened!");
-      }
-      kinect.on('bodyFrame', function(bodyFrame){
-        // console.log(bodyFrame);
-        client3.emit('bodyFrame',bodyFrame);
-      });
-
-      kinect.openBodyReader();
-    }
-  });
-  socket.on('keyDown', function (data) {
-    console.log(data.keyDown);
-    if(data.keyDown==="down"){
-      client3.emit('finishedGraffiti', { 
-       finishedGraffiti: true
-      });
-    }
-  });
+client3.on('startKinect',function(data){
+  startKinect();
+});
+client3.on('stopKinect',function(data){
+  stopKinect();
 });
 
+listener.sockets.on('connection', function (socket) {
+  var kinectOpened=false;
+  socket.on('keyUp', function (data) {
+    console.log(data.keyUp);
+    if(data.keyUp==="up"&&!kinectOpened){
+      startKinect();
+      kinectOpened=true;
+    }
+  });
+  
+  socket.on('keyDown', function (data) {
+    console.log(data.keyDown);
+    if(data.keyDown==="down"&&kinectOpened){
+      stopKinect();
+      kinectOpened=false;
+    }
+  });
+
+});
+var kinect = new Kinect2();
+function startKinect(){
+  client3.emit('forCom3', { 
+    sense: 1
+  });
+  
+  if(kinect.open()) {
+      console.log("Kinect opened!");
+  }
+  kinect.on('bodyFrame', function(bodyFrame){
+    // console.log(bodyFrame);
+    client3.emit('bodyFrame',bodyFrame);
+  });
+
+  kinect.openBodyReader();
+}
+
+function stopKinect(){
+  client3.emit('finishedGraffiti', { 
+    finishedGraffiti: true
+  });
+  kinect.close();
+  console.log("Kinect close!")
+}
 server.listen(3003);
 
 
