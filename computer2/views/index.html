@@ -14,6 +14,7 @@
     body {
         background: black;
         position: relative;
+        margin:0;
     }
 
     .canvas-dis {
@@ -47,6 +48,40 @@
         height: 25px;
         background: green;
     }
+    .takepen{
+        margin-top: 50vh;
+        text-align: center;
+        transform: translateY(-50%);
+        font-size: 25pt;
+        opacity: 0;
+        letter-spacing: 15px;
+        transition: all 2s ease-out;
+
+    }
+    .takepen-big{
+        opacity: 1;
+        transform: scale(1.5);
+    }
+    .last1{
+        position: absolute;
+        top:50vh;
+        /*margin-top: 50vh;*/
+        width:100%;
+        text-align: center;
+        transform: translate(-50%);
+        font-size: 25pt;
+        opacity: 0;
+        letter-spacing: 15px;
+        transition: all 3s ease-out;
+    }
+    .last1-big{
+        opacity: 1;
+        transform: scale(1.5);
+    }
+    #v1{
+        position: absolute;
+        top:0;
+    }
 </style>
 
 <body>
@@ -65,31 +100,49 @@
             socket.on('pen', function (data) {
                 console.log("pen:" + data.pen);
                 console.log('請拿起左邊櫃子上的筆');
-                $("#container").html(
-                    `<div id="alert" style="color:white;">請拿起左邊櫃子上的筆</div>`
-                );
-
+                // $("#container").html(
+                //     `<div id="alert" class="takepen" style="color:white;">請拿起左邊櫃子上的筆</div>`
+                // );
+                console.log(document.querySelector('.takepen'));
+                document.querySelector('.takepen').classList.add('takepen-big');
                 socket.on('playVideo3', function (data) {
                     console.log("playVideo:" + data.playVideo3);
                     if (data.playVideo3 == 1) {
                         console.log("playVideo:" + data.playVideo3);
-                        $("#container").html(
+                        $(".takepen").remove();
+                        $("#container").append(
                             `<video id="v1" controls="controls" src="video.mp4" style="display:block;"></video>`
                         );
                         document.querySelector('#v1').width = window.innerWidth;
                         $("#v1")[0].play();
                         $("#v1").on('ended', function () {
-                            console.log('video finished');
-                            $("#container").html(
-                                `
-                                <canvas id="bodyCanvas" width="512" height="424"></canvas>
-	                            <div id="pointer"></div>
-                                <div id="colorTips"></div>
+                            // $("#v1").css("display","none");
+                            // $("#container").html(
+                            // `<div id="alert" class="last1" style="color:white;">接下來是最後一項裝置</div>`
+                            // );
+                            // document.querySelector('.last1').classList.add('last1-big');
+                            // setTimeout(function () {
+                                $("#container").html(
+                                    `<video id="v2" controls="controls" src="teach.mov" style="display:block; width:100%;"></video>`
+                                );
+
+                                $("#v2")[0].play();
+
+                                $("#v2").on('ended', function () {
+                                console.log('video finished');
+                                $("#container").html(
                                     `
-                            );
-                            $(document.body).append('<script src="kinect2.js"><' +
-                                '/script>');
+                                    <canvas id="bodyCanvas" width="512" height="424"></canvas>
+                                    <div id="pointer"></div>
+                                    <div id="colorTips"></div>
+                                        `
+                                );
+                                $(document.body).append('<script src="kinect2.js"><' +
+                                    '/script>');
+                                });
+                            // },4000);
                         });
+                        
                     }
                 });
             });
@@ -105,21 +158,25 @@
                 setInterval(time, 30);
 
                 function time() {
-                    document.querySelector('canvas').style.opacity -= 0.01;
+                    if( document.querySelector('canvas') != null){
+                        document.querySelector('canvas').style.opacity -= 0.01;
+                    }
                 }
                 setTimeout(function () {
                     clearInterval(time);
                     document.querySelector('canvas').remove();
                     $("#container").append(
-                        `<video id="v1" controls="controls" src="shin.mp4" autoplay style="display:block;"></video>`
+                        `<video id="v3" controls="controls" src="shin.mp4" autoplay style="display:block;"></video>`
                     );
-                    document.querySelector('#v1').width = window.innerWidth;
+                    document.querySelector('#v3').width = window.innerWidth;
                 }, 3000);
             }
         });
     </script>
     <div id="container">
-
+        <div id="alert" class="takepen" style="color:white;">請拿起左邊櫃子上的筆</div>
+        <!-- <div id="alert" class="last1" style="color:white;">一起來塗鴉吧～</div> -->
+        <!-- <div id="alert" class="last2" style="color:white;">接下來是最後一項裝置</div> -->
     </div>
 </body>
 

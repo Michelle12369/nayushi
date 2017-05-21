@@ -2,7 +2,10 @@ var setClient3 = require('socket.io-client');
 // var five = require("johnny-five"),
 //   fsr;
 
-var client3 = setClient3.connect('http://192.168.1.171:3002');
+
+// 記得要改ip位址
+var client3 = setClient3.connect('http://localhost:3002');
+
 var express = require('express'),
   io = require('socket.io'),
   http = require('http');
