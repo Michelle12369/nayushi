@@ -2,7 +2,8 @@ var pointer = document.querySelector('#pointer');
 var colorTips = document.querySelector('#colorTips');
 var canvas = document.querySelector('#bodyCanvas');
 
-var windowWidth=window.innerWidth;
+var windowWidth=window.innerWidth - 300;
+console.log(windowWidth+" "+windowHeight);
 var windowHeight=window.innerHeight;
 canvas.width = windowWidth;
 canvas.height = windowHeight;

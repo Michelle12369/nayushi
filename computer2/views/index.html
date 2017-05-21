@@ -27,7 +27,8 @@
         top: 0;
         left: 0;
         transition: transform 1.5s ease-out, opacity 1.5s ease;
-        background: url(img/wall.jpg);
+        /*background: url(img/wall.jpg);*/
+        background-color: rgb(240,240,240);
     }
 
     #pointer {
@@ -54,7 +55,7 @@
         transform: translateY(-50%);
         font-size: 25pt;
         opacity: 0;
-        letter-spacing: 15px;
+        letter-spacing: 2px;
         transition: all 2s ease-out;
 
     }
@@ -71,7 +72,7 @@
         transform: translate(-50%);
         font-size: 25pt;
         opacity: 0;
-        letter-spacing: 15px;
+        letter-spacing: 5px;
         transition: all 3s ease-out;
     }
     .last1-big{
@@ -81,6 +82,32 @@
     #v1{
         position: absolute;
         top:0;
+    }
+    .picture{
+        position: absolute;
+        right: 0;
+        width: 300px;
+    }
+    .picture>img{
+        width: 100%;
+    }
+    .last2{
+        position: absolute;
+        top:50vh;
+        /*margin-top: 50vh;*/
+        width:100%;
+        text-align: center;
+        /*transform: translate(-50%);*/
+        font-size: 25pt;
+        /*opacity: 0;*/
+        /*letter-spacing: 15px;*/
+        /*display: none;*/
+         /*transform: scale(1.5);*/
+        transition: all 3s ease-out;
+    }
+    .last2-big{
+        opacity: 1;
+        transform: scale(1.5);
     }
 </style>
 
@@ -135,6 +162,11 @@
                                     <canvas id="bodyCanvas" width="512" height="424"></canvas>
                                     <div id="pointer"></div>
                                     <div id="colorTips"></div>
+                                    <div class="picture">
+                                        <img src="img/pic1.png" alt="" />
+                                        <img src="img/pic2.png" alt="" />
+                                        <img src="img/pic3.png" alt="" />
+                                    </div>
                                         `
                                 );
                                 $(document.body).append('<script src="kinect2.js"><' +
@@ -154,6 +186,7 @@
             function myfunction() {
                 $("#pointer").remove();
                 $("#colorTips").remove();
+                $(".picture").remove();
                 document.querySelector('canvas').classList.add('canvas-dis');
                 setInterval(time, 30);
 
@@ -169,12 +202,20 @@
                         `<video id="v3" controls="controls" src="shin.mp4" autoplay style="display:block;"></video>`
                     );
                     document.querySelector('#v3').width = window.innerWidth;
+                    $("#v3").on('ended', function () {
+                        $("#container").html(
+                            `<div id="alert" class="last2" style="color:white;">感謝您的參與，請由右方門口出去即可。</div>`
+                        ).css('display','none').fadeIn('slow');
+                    
+                    });
                 }, 3000);
             }
         });
     </script>
     <div id="container">
         <div id="alert" class="takepen" style="color:white;">請拿起左邊櫃子上的筆</div>
+
+        
         <!-- <div id="alert" class="last1" style="color:white;">一起來塗鴉吧～</div> -->
         <!-- <div id="alert" class="last2" style="color:white;">接下來是最後一項裝置</div> -->
     </div>
